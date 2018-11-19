@@ -33,7 +33,30 @@ int main(int argc, char* argv[])
 	const robot_state::JointModelGroup* joint_model_group = 
 		move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);
 
+
+	//
 	//表示
+	//
+	
+	//MoveItVisualizToolsパッケージは多くの物体をRviz上に表示させることができます．
+	//たとえば，物体，ロボット，そしてトラジェクトリーです．
+	//さらにデバッグ用にステップバイステップですすめることもできます．
+	
+	namespace rvt = rviz_visual_tools;
+	moveit_visual_tools::MoveItVisualTools visual_tools("panda_link0");
+	visual_tools.deleteAllMarkers();
+
+	//remoteControlはユーザーにGUIによるステップバイステップの
+	//制御を提供するツールです．Rvizにてボタンやキーボードからの命令を受け付けます．
+	visual_tools.loadRemoteControl();
+
+	//Rvizは多くのマーカーを提供します．このデモではテキスト，円柱，球体を利用します．
+	Eigen::Affine3d text_pose = Eigen::Affine3d::Identity();
+	text_pose.translation().z() = 1.75;
+	visual_tools.publishText(text_pose, "MoveGroupInterface Demo", rvt::WHITE, rvt::XLARGE);
+
+	//バッチパブリッシュはRvizに送られるメッセージの数を減らします．
+	visual_tools.trigger();
 	
 	//
 	//基本的な情報の取得
@@ -49,6 +72,11 @@ int main(int argc, char* argv[])
 	ROS_INFO_NAMED("tutorial", "Available Planning Groups: ");
 	std::copy(move_group.getJointModelGroupNames().begin(), move_group.getJointModelGroupNames().end(), std::ostream_iterator<std::string>(std::cout, ", "));
 
+	//
+	//デモ開始
+	//
+	//ターミナルに出力
+	visual_tools.prompt("Press 'next' in the RvizVisualToolsGUI window to start the demo");
 	
 	//
 	//ゴールへのプランニング
@@ -74,7 +102,17 @@ int main(int argc, char* argv[])
 		ROS_WARN_NAMED("tutorial", "Visualizing plan 1 (pose goal) failed");
 	}
 	
-	move_group.move();
+	//move_group.move();
+
+	//プランの表示
+	//我々はプランをマーカのラインとしてRviz上に表示できます．
+	ROS_INFO_NAMED("tutorial", "Visualizing plan 1 as trajectory line");
+	visual_tools.publishAxisLabeled(target_pose1, "pose1");
+	visual_tools.publishText(text_pose, "Pose goal", rvt::WHITE, rvt::XLARGE);
+	visual_tools.publishTrajectoryLine(my_plan.trajectory_, joint_model_group);
+	visual_tools.trigger();
+	visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");
+	
 
 	//
 	//Joint空間でのプランニング
@@ -102,6 +140,12 @@ int main(int argc, char* argv[])
 
 	move_group.move();
 
+	//表示
+	visual_tools.deleteAllMarkers();
+	visual_tools.publishText(text_pose, "Joint Space Goal", rvt::WHITE, rvt::XLARGE);
+	visual_tools.publishTrajectoryLine(my_plan.trajectory_, joint_model_group);
+	visual_tools.trigger();
+	visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");
 
 	//
 	//パス制約とともにプランニング
@@ -128,6 +172,7 @@ int main(int argc, char* argv[])
 	//注意：これは現在の状態がすでにパス制約を満足している場合にのみうまく動きます．
 	//なので，われわれはスタート状態を新しいポーズにセットしないといけません．
 	robot_state::RobotState start_state(*move_group.getCurrentState());
+	//Oeientationだけ変更.その他は現在のstart_stateのまま
 	geometry_msgs::Pose start_pose2;
 	start_pose2.orientation.w = 1.0;
 	start_pose2.position.x = 0.55;
@@ -153,7 +198,76 @@ int main(int argc, char* argv[])
 		ROS_INFO_NAMED("tutorial", "Visualizing plan 3 (with constrains) failed");
 	}
 
-	move_group.move();
+	//表示
+	visual_tools.deleteAllMarkers();
+	visual_tools.publishAxisLabeled(start_pose2, "start");
+	visual_tools.publishAxisLabeled(target_pose1, "goal");
+		visual_tools.publishText(text_pose, "Gonstraind Goal", rvt::WHITE, rvt::XLARGE);
+	visual_tools.publishTrajectoryLine(my_plan.trajectory_, joint_model_group);
+	visual_tools.trigger();
+	visual_tools.prompt("next step");
+
+	//move_group.move();
 	move_group.clearPathConstraints();
+
+
+	//
+	//直交座標系のパス
+	//
+	
+	//あなたは直交座標系空間でパスプランニングをwaypointsを設定することによって
+	//直接的に行うことが可能です．waypointsとはアームのエンドエフェクタが通りすぎる
+	//点のことです．
+	//我々が上述の新しい状態からスタートしていることに気をつけてください．
+	//初期ポーズ（start state)はwaypointのリストに加える必要はありません．
+	//しかし，加えたほうがビジュアライズの助けにはなります．
+	
+	std::vector<geometry_msgs::Pose> waypoints;
+	waypoints.push_back(start_pose2);
+
+	geometry_msgs::Pose target_pose3 = start_pose2;;
+
+	target_pose3.position.z -= 0.2;
+	waypoints.push_back(target_pose3);	//down
+
+	target_pose3.position.y -= 0.2;
+	waypoints.push_back(target_pose3);	//right
+
+	target_pose3.position.z += 0.2;
+	target_pose3.position.y += 0.2;
+	target_pose3.position.x -= 0.2;
+	waypoints.push_back(target_pose3);	//up and left
+
+	//直交座標系でのしばしば，ゆっくりとした動作が必要とされます．
+	//アプローチや把持の再試行といった動作にです．
+	//ここで，我々はスケーリングファクターを利用してロボットの
+	//各関節の最大動作速度を少なくする方法を勉強します．
+	//エンドエフェクターのスピードでは無いことに注意してください．
+	move_group.setMaxVelocityScalingFactor(0.1);
+
+	//我々は１ｃｍずつ補間された直交座標系のパスが欲しいので
+	//最大ステップを0.01に指定しましょう．
+	//我々はジャンプしきい値を0.0に設定します．そうすることで
+	//ジャンプしきい値を無効にすることができます．
+	//実際のハードウェアを操作している間にジャンプしきい値を無効にすると
+	//予期せぬ余分なジョイントの動きが発生し，安全上の問題になることがあります．
+	
+	moveit_msgs::RobotTrajectory trajectory;
+	const double jump_threshold = 0.0;
+	const double eef_step = 0.01;
+	double fraction = move_group.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
+	//move_group.move();
+	ROS_INFO_NAMED("tutorial", "visualizing plan(Cartesian path)", fraction * 100.0);
+
+	//表示
+	visual_tools.deleteAllMarkers();
+	visual_tools.publishText(text_pose, "Joint Space Goal", rvt::WHITE, rvt::XLARGE);
+	visual_tools.publishPath(waypoints, rvt::LIME_GREEN, rvt::SMALL);
+	for (int i = 0; i < waypoints.size(); ++i) {
+		visual_tools.publishAxisLabeled(waypoints[i], "pt" + std::to_string(i), rvt::MEDIUM);
+	}
+	visual_tools.trigger();
+	visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");
+
 	return 0;
 }
