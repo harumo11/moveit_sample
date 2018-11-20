@@ -1,13 +1,25 @@
+<!-- コードを実行するために，我々は下記のことをしなければなりません -->
+<!-- URDF&SRDFをパラメータサーバーに読み込ませる -->
+<!-- MoveIt! Setup Assistantで作成したkinematic_solver configurationを -->
+<!-- パラメータサーバに読み込ませる．そのときにnamespaceはチュートリアルのノードの-->
+<!-- ものと一致していなければならない-->
+
 <launch>
+	<!-- URDF&SRDFをパラメータサーバに読み込ませるためのlaunchfileを起動するためのlaunchファイルをこのlaunchファイルに含める -->
 	<include file="$(find panda_moveit_config)/launch/planning_context.launch">
+		<!-- load_robot_desctiption:=true と同じ意味かも-->
 		<arg name="load_robot_description" value="true"/>
 	</include>
 
+	<!-- ROSCOREに登録するノードの名前 -->
 	<node name="robot_state"
 		pkg="my_moveit"
 		type="robot_state_node"
 		respawn="false" output="screen">
-	  <rosparam command="load"
-			file="$(find panda_moveit_config)/config/kinematics.yaml"/>
+
+		<!-- パラメータサーバに設定値を書き出したyamlをロードさせる -->
+		<rosparam command="load" file="$(find panda_moveit_config)/config/kinematics.yaml"/>
+
 	</node>
+
 </launch>

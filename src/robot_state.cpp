@@ -6,6 +6,10 @@
 #include <moveit/robot_model/robot_model.h>
 #include <moveit/robot_state/robot_state.h>
 
+//Eigen
+#include <eigen3/Eigen/Dense>
+#include <eigen3/Eigen/Geometry>
+
 int main(int argc, char* argv[])
 {
 	ros::init(argc, argv, "robot_model_and_state_tutorial");
@@ -65,7 +69,7 @@ int main(int argc, char* argv[])
 	//
 	//Joint Limits
 	//
-	//setJointGroupPosition()だけでは関節角度の制限を強制しませんが
+	//setJointGroupPosition()だけでは関節角度の限界を実施(変更?)しませんが
 	//enforceBounds()を呼ぶことは，それを行います．
 	
 	//panda armの１関節を関節限界の外に設定します．
@@ -81,7 +85,7 @@ int main(int argc, char* argv[])
 		ROS_INFO("All joints are inside of limit");
 	}
 
-	//その関節限界を強制し，もう一度チェックします．
+	//その関節限界を実施(変更?)し，もう一度チェックします．
 	kinematic_state->enforceBounds();
 	//Should be valid!
 	if (!kinematic_state->satisfiesBounds()) {
@@ -92,5 +96,57 @@ int main(int argc, char* argv[])
 	}
 
 	
+	//
+	//Forward kinematics
+	//
+	//ランダムな関節の角度に対して，我々は順運動学を計算することが出来ます．
+	//我々はpanda_link8の姿勢を見つけたいということに注意してください．
+	//panda_groupの中でpanda_link8は最も遠方のリンクです．
+	//各関節角度をランダムな値に変更　ー＞　joint_model_group(関節のつき方の情報を与える) ー＞　順運動学でどのリンクの姿勢を求めるのかを指定　ー＞　手先の姿勢を得る．
+	kinematic_state->setToRandomPositions(joint_model_group);
+	const Eigen::Affine3d end_effector_state = kinematic_state->getGlobalLinkTransform("panda_link8");
+	//end-effectorの姿勢を表示する．これはモデルフレームの中にあるということに注意してください
+	ROS_INFO("Forward kinematics");
+	ROS_INFO_STREAM("Translation: \n" << end_effector_state.translation() << "\n");
+	ROS_INFO_STREAM("Rotation: \n" << end_effector_state.rotation() << "\n");
+
+	//
+	//Inverse kinematics
+	//
+	//我々は逆運動学IKも解くことが可能です．
+	//IKを解くためには我々は下記のことについて知っておく必要があります．
+	// 
+	// - end-effectorの所望の姿勢(デフォルトではpanda_armの最後のリンク)
+	//   今回使用するend_effector_stateはすでに上で計算してあります．
+	// - 試行回数(10)
+	// - 各試行にかける時間(Timeout) 0.1s
+	std::size_t attempt = 10;
+	double timeout = 0.1;
+	bool found_ik = kinematic_state->setFromIK(joint_model_group, end_effector_state, attempt, timeout);
+	//もし見つかれば，それを表示することができます
+	if (found_ik) {
+		ROS_INFO("IK solution");
+		kinematic_state->copyJointGroupPositions(joint_model_group, joint_values);
+		for (int i = 0; i < joint_names.size(); i++) {
+			ROS_INFO("Joint %s: %f", joint_names[i].c_str(), joint_values[i]);
+		}
+	}
+	else {
+		ROS_INFO("Did not find IK solution");
+	}
+
+	//
+	//Get the Jacobian
+	//
+	//ヤコビアンもRobotStateクラスから得ることが出来ます．
+	Eigen::Vector3d reference_point_position(0.0,0.0,0.0);
+	Eigen::MatrixXd jacobian;
+	kinematic_state->getJacobian(joint_model_group, 
+			                     kinematic_state->getLinkModel(joint_model_group->getLinkModelNames().back()),
+								 reference_point_position, jacobian);
+	ROS_INFO_STREAM("Jacobian: \n" << jacobian << "\n");
+
+
+
 	return 0;
 }
