@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Harumo Sasatake">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>ここから始めよう! - MoveIt! Japanese!</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link href="https://unpkg.com/mermaid@7.1.2/dist/mermaid.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "\u3053\u3053\u304b\u3089\u59cb\u3081\u3088\u3046!";
+    var mkdocs_page_input_path = "1.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> MoveIt! Japanese!</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">MoveIt!のチュートリアル</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">ここから始めよう!</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#_1">ここから始めよう!</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#roscatkin">ROSとCatkinのインストール</a></li>
+        
+            <li><a class="toctree-l3" href="#moveit">MoveIt!のインストール</a></li>
+        
+            <li><a class="toctree-l3" href="#catkin">練習用のcatkinパッケージを作ろう</a></li>
+        
+            <li><a class="toctree-l3" href="#_2">サンプルコードのダウンロード</a></li>
+        
+            <li><a class="toctree-l3" href="#catkin-workspace">catkin workspaceをビルドする</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../2/">MoveIt!のクイックスタート．Rvizとともに</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../3/">Move Group C++ インターフェース</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../4/">Robot ModelとRobot State</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../5/">プランニングシーン</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../dot/">Dot</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../mermaid/">H</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">MoveIt! Japanese!</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>ここから始めよう!</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="_1">ここから始めよう!</h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>このチュートリアルは<code>ROS Melodic</code>バージョンのMoveIt!を使用していますよ．</p>
+</div>
+<h2 id="roscatkin">ROSとCatkinのインストール</h2>
+<p>ROS Melodicをインストールしてください．これはとてもミスしやすいステップです．
+注意深く進めましょう．もし，あなたが次から行ういくつかのステップにおいてエラーが出てしまったら
+この章に立ち返って，正しくROSをインストールすることをオススメします．</p>
+<p>ROSがインストールできたら，パッケージのアップデートを忘れずにしましょう．</p>
+<div class="highlight"><pre><span></span>rosdep
+sudo apt update
+sudo apt upgrade
+sudo apt dist-upgrade
+</pre></div>
+
+<p>ROSのビルドシステムである<a href="wiki.ros.org/catkin">catkin</a>をインストールしましょう．</p>
+<div class="highlight"><pre><span></span>sudo apt install ros-melodic-catkin python-catkin-tools
+</pre></div>
+
+<h2 id="moveit">MoveIt!のインストール</h2>
+<p>最も簡単なMoveIt!のインストール方法は事前にビルドしてあるものを使用することです．</p>
+<div class="highlight"><pre><span></span>sudo apt install ros-melodic-moveit
+</pre></div>
+
+<h2 id="catkin">練習用のcatkinパッケージを作ろう</h2>
+<p>catkinワークスペースのセットアップが必要なのでしましょう．</p>
+<div class="highlight"><pre><span></span>mkdir -p ~/catkin_ws/src
+</pre></div>
+
+<h2 id="_2">サンプルコードのダウンロード</h2>
+<p>チュートリアルに沿って勉強するために，<strong>ROBOT_moveit_config</strong>パッケージを作成しましょう．
+デフォルトのサンプルではPanda arm(Franka Emika製)を使用します．<strong>panda_moveit_config</strong>パッケージ
+を取得するときには，ソースコードからインストールすることをオススメします．ソースコードを
+見ることによって理解が深まりますよ．</p>
+<p>あなたのcatkin_wsの中に，チュートリアルだけでなく<code>panda_moveit_config</code>パッケージも
+ダウンロードしてください．</p>
+<div class="highlight"><pre><span></span>cd ~/catkin_ws/src
+git clone https://github.com/ros-planning/moveit_tutorials.git -b master
+git clone https://github.com/ros-planning/panda_moveit_config.git -b melodic-devel
+</pre></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>今回は事前に作成された<code>panda_moveit_config</code>パッケージを使用しますが，
+後々，このパッケージの使用方法を勉強しますのでご安心くださいね．</p>
+</div>
+<h2 id="catkin-workspace">catkin workspaceをビルドする</h2>
+<p>下記のコマンドで足りていないパッケージを自動的にインストールします．</p>
+<div class="highlight"><pre><span></span>cd ~/catkin_ws/src
+rosdep install -y --from-paths . --ignore-src --rosdistro melodic
+</pre></div>
+
+<p>次のコマンドはcatkin workspaceの設定をします．</p>
+<div class="highlight"><pre><span></span>cd ~/catkin_ws/src
+catkin config --extend /opt/ros/${ROS_DISTRO} --cmake-args -DCMAKE_BUILD_TYPE=Release
+catkin build
+</pre></div>
+
+<p><code>catkin build</code>で作成された設定を反映します．
+具体的には下記のコマンドを打つことで,
+今,ビルドされた新しいパッケージに対してtab補完などが効く用になります．</p>
+<p>やってもいいし，やらなくてもいいですが
+上述のコマンドを<code>.bashrc</code>ファイルに書き込んでおくと，上述のコマンドをビルドのたびに
+打ち直す必要がなくて便利です．ファイルへの書き込みは下記のコマンドでできます．</p>
+<div class="highlight"><pre><span></span>echo &#39;source ~/catkin_ws/devel/setup.bash&#39; &gt;&gt; ~/.bashrc
+</pre></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>上記のコマンドで自動的にファイルへ書き込むことは強制ではありませんし,
+複数のcatkin_wsを同時に使用するような強者は，この工程をしばしば飛ばしますが，
+今回はチュートリアルなので，コマンドを使用して自動的に書き込みたいと思います．</p>
+</div>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../2/" class="btn btn-neutral float-right" title="MoveIt!のクイックスタート．Rvizとともに">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href=".." class="btn btn-neutral" title="MoveIt!のチュートリアル"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../2/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+      <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

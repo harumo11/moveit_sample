@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MoveIt!チュートリアルの和訳">
+  <meta name="author" content="Harumo Sasatake">
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <title>MoveIt!のチュートリアル - MoveIt! Japanese!</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link href="https://unpkg.com/mermaid@7.1.2/dist/mermaid.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "MoveIt!\u306e\u30c1\u30e5\u30fc\u30c8\u30ea\u30a2\u30eb";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="js/jquery-2.1.1.min.js" defer></script>
+  <script src="js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> MoveIt! Japanese!</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href=".">MoveIt!のチュートリアル</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#moveit">MoveIt!のチュートリアル</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#moveitrviz">ここから始めよう！ MoveIt!とRviz</a></li>
+        
+            <li><a class="toctree-l3" href="#movegroup-cpythonros-">MoveGroup - C++とPythonのROSラッパー -</a></li>
+        
+            <li><a class="toctree-l3" href="#cmoveit">C++を利用して直接的にMoveIt!を使う</a></li>
+        
+            <li><a class="toctree-l3" href="#_1">新しいロボットで使うには</a></li>
+        
+            <li><a class="toctree-l3" href="#_2">設定</a></li>
+        
+            <li><a class="toctree-l3" href="#_3">その他</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="1/">ここから始めよう!</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="2/">MoveIt!のクイックスタート．Rvizとともに</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="3/">Move Group C++ インターフェース</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="4/">Robot ModelとRobot State</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="5/">プランニングシーン</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="dot/">Dot</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="mermaid/">H</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">MoveIt! Japanese!</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>MoveIt!のチュートリアル</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="moveit">MoveIt!のチュートリアル</h1>
+<div class="admonition source">
+<p class="admonition-title">Source</p>
+<p><a href="https://ros-planning.github.io/moveit_tutorials/index.html">ここの翻訳</a></p>
+</div>
+<div class="admonition 参考">
+<p class="admonition-title">参考</p>
+<p><a href="https://yakworks.github.io/mkdocs-material-components/cheat-sheet/">material cheet sheet</a></p>
+</div>
+<p>これらのチュートリアルを通してMoveIt!を学びましょう．ちなみに，MoveIt!はモーションプランニングフレームワークですよ．</p>
+<p><img alt="image" src="https://ros-planning.github.io/moveit_tutorials/_images/rviz_plugin_head.png" /></p>
+<p>これらのチュートリアルでは，Franka Emika Pandaロボットを例と指定使用します．
+すでにMoveIt!に対応する用に設定されたロボットであれば，簡単にPandaロボットを置き換えることが
+可能です．ロボットが<strong>すぐに</strong>利用可のかどうかは<a href="https://moveit.ros.org/robots/">MoveIt!ですぐに使用可能な
+ロボットのリスト</a>を見てください．もし，リストにあなたのお気に入りの
+ロボットが無い場合には，あなた自身がMoveIt!の設定を作成すれば，あなたのロボットでMoveIt!を
+使用することができるようになります．
+詳しくは"新しいロボットで使うには"の章を見てください．</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>これはROS MelodicバージョンのMoveIt!の和訳です．Kineticのチュートリアルは
+<a href="http://docs.ros.org/kinetic/api/moveit_tutorials/html/index.html">Kinetic 英語</a>を見てください．</p>
+</div>
+<h2 id="moveitrviz">ここから始めよう！ MoveIt!とRviz</h2>
+<ul>
+<li><a href="1/">ここから始めよう！</a></li>
+<li><a href="2/">MoveIt!のクイックスタート．Rvizとともに</a></li>
+</ul>
+<h2 id="movegroup-cpythonros-">MoveGroup - C++とPythonのROSラッパー -</h2>
+<p>MoveIt!を使用する最も簡単な方法は<code>move_group_interface</code>クラスを利用することです．
+このインターフェースを利用することは初心者におすすめです．さらに，このクラスはMoveIt!の
+多くの機能へ統一された方法でアクセスすることができます．</p>
+<ul>
+<li>Move Group C++ インターフェース</li>
+<li>Move Group Python インターフェース</li>
+<li>MoveIt! Commander インターフェース</li>
+</ul>
+<h2 id="cmoveit">C++を利用して直接的にMoveIt!を使う</h2>
+<p>MoveIt!を利用して複雑なアプリケーションを作成するときにはMoveIt!のC++インターフェースを
+利用して下さい．さらに，直接的にC++ APIを使用することにより多くのROSサービス/アクション層を
+スキップできるので，パフォーマンスが大幅に向上します．</p>
+<ul>
+<li><code>Robot Model</code>と<code>Robot State</code></li>
+<li>プランニングシーン(Planning Scene)</li>
+<li>プランニングシーン(ROS API)</li>
+<li>モーションプランニングAPI</li>
+<li>モーションプランニングのパイプライン</li>
+<li>衝突の表示</li>
+<li>時間パラメータの設定</li>
+<li>ゆるく組み合わさった拘束とプランニング</li>
+<li>ピック＆プレイス</li>
+</ul>
+<h2 id="_1">新しいロボットで使うには</h2>
+<p>新しいロボットのMoveIt!の設定を作成する前に，<a href="https://moveit.ros.org/robots/">このリスト</a>で
+そのロボットが設定済みであるかどうかを確認してください．なかった場合にはこのチュートリアルを
+参照してください.(そして，その結果をMoveIt!のメーリングリストに投稿してください)</p>
+<ul>
+<li>MoveIt!セットアップアシスタント</li>
+<li><code>URDF</code>と<code>SRDF</code></li>
+<li>低レベルコントローラ</li>
+<li>知覚パイプラインのチュートリアル</li>
+<li><code>IKfast</code>ソルバー</li>
+<li><code>Track-IK</code>ソルバー</li>
+</ul>
+<h2 id="_2">設定</h2>
+<ul>
+<li>運動学の設定</li>
+<li>Fakeコントローラマネージャー</li>
+<li>カスタム制約サンプラー</li>
+<li>OMPLプランナー</li>
+<li>CHOMPプランナー</li>
+<li>STOMPプランナー</li>
+<li>プランニングアダプターのチュートリアル</li>
+</ul>
+<h2 id="_3">その他</h2>
+<ul>
+<li>ジョイスティック</li>
+<li>ベンチマーク</li>
+<li>結合/ユニット テスト</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="1/" class="btn btn-neutral float-right" title="ここから始めよう!">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+        <span style="margin-left: 15px"><a href="1/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="js/theme.js" defer></script>
+      <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+      <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js" defer></script>
+      <script src="search/main.js" defer></script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.0.4
+Build Date UTC : 2019-04-19 15:15:54
+-->

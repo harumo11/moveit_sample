@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Harumo Sasatake">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Move Group C++ インターフェース - MoveIt! Japanese!</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link href="https://unpkg.com/mermaid@7.1.2/dist/mermaid.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Move Group C++ \u30a4\u30f3\u30bf\u30fc\u30d5\u30a7\u30fc\u30b9";
+    var mkdocs_page_input_path = "3.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> MoveIt! Japanese!</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">MoveIt!のチュートリアル</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../1/">ここから始めよう!</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../2/">MoveIt!のクイックスタート．Rvizとともに</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Move Group C++ インターフェース</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#move-group-c">Move Group C++ インターフェース</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#_1">はじめに</a></li>
+        
+            <li><a class="toctree-l3" href="#_2">コードの実行</a></li>
+        
+            <li><a class="toctree-l3" href="#_3">予想される結果</a></li>
+        
+            <li><a class="toctree-l3" href="#_4">全体のコード</a></li>
+        
+            <li><a class="toctree-l3" href="#_8">デモの開始</a></li>
+        
+            <li><a class="toctree-l3" href="#_13">直交座標系の軌道</a></li>
+        
+            <li><a class="toctree-l3" href="#_14">オブジェクトの追加・削除とオブジェクトの取り付け・取り除き</a></li>
+        
+            <li><a class="toctree-l3" href="#launch">Launchファイル</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../4/">Robot ModelとRobot State</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../5/">プランニングシーン</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../dot/">Dot</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../mermaid/">H</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">MoveIt! Japanese!</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Move Group C++ インターフェース</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="move-group-c">Move Group C++ インターフェース</h1>
+<p><img alt="image" src="https://ros-planning.github.io/moveit_tutorials/_images/move_group_interface_tutorial_start_screen.png" /></p>
+<p>MoveIt!において，最も簡単なユーザーインターフェースは<a href="http://docs.ros.org/melodic/api/moveit_ros_planning_interface/html/classmoveit_1_1planning__interface_1_1MoveGroupInterface.html">MoveGroupInterface</a>
+クラスを使うことです．そのクラスはユーザーが実行しそうな殆どの機能を提供します．
+特に，ジョイントやゴールのポーズを設定したり，モーションプランニングを計画したり，
+ロボットを動かしたり，環境中に物体を設置/排除したり, ロボットに物体を設置/排除したりする
+ことができます．このインターフェースはROSのトピックやサービス，またはアクションを通して
+<a href="http://docs.ros.org/indigo/api/moveit_ros_move_group/html/annotated.html">MoveGroup Node</a>
+と通信します．</p>
+<p><code>move group interface</code>クラスでどのようなことが可能なのかを手っ取り早く知るためには，
+<a href="https://www.youtube.com/watch?v=_5siHkFQPBQ&amp;feature=youtu.be">YouTube video demo</a>を見てください．</p>
+<h2 id="_1">はじめに</h2>
+<p>おお，勇者よ．<a href="../1/">ここから始めよう!</a>を飛ばしてしまうとは情けない．
+戻ってやり直すのじゃ．</p>
+<h2 id="_2">コードの実行</h2>
+<p>２つのターミナルを開いておきましょう．１つ目のターミナルではRvizを実行し，そしてロードが
+済むのを待ちましょう．</p>
+<div class="highlight"><pre><span></span>roslaunch panda_moveit_config demo.launch
+</pre></div>
+
+<p>２つ目のターミナルでlaunchファイルを立ち上げてください．</p>
+<div class="highlight"><pre><span></span>roslaucn moveit_tutorials move_group_interface_tutorial.launch
+</pre></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>このチュートリアルはデモをステップ・バイ・ステップですすめるために，
+<strong>RvizVisualToolsGui</strong>パネルを使用します．パネルをRvizに追加するためには
+<a href="https://ros-planning.github.io/moveit_tutorials/doc/move_group_interface/move_group_interface_tutorial.html">Visualization Turorial</a>
+のRviz Viaual Toolsの章を見てください．</p>
+</div>
+<p>しばらくした後，Rvizのウィンドウが開かれ，このページの最初にあるようなものが見れるはずです．
+これからいくつか<code>move_group_interface</code>クラスのデモを体験していきますが，デモをすすめるためには
+ウィンドウの下に配置されている<strong>RvizVisualToolsGui</strong>の<strong>Next</strong>ボタンを押すか，または，
+ウィンドウの上部の<strong>Tools</strong>パネルにある<strong>Key Tool</strong>を選択し，あなたのキーボードの<strong>N</strong>を押してください．
+もちろん，Rvizにフォーカスした状態で．</p>
+<h2 id="_3">予想される結果</h2>
+<p>予想される結果は先程，
+<a href="https://www.youtube.com/watch?v=_5siHkFQPBQ&amp;feature=youtu.be">YouTube video demo</a>で確認したとおりですが，
+具体的に言うと，Rviz上で以下のことが行われることです．</p>
+<ol>
+<li>ロボットがアームの姿勢を前方に動かす</li>
+<li>ロボットがアームの関節を動かす．</li>
+<li>ロボットがアームを後方の新しいエンドエフェクタのゴール姿勢に動かす</li>
+<li>ロボットのエンドエフェクタが指定された直交座標系のパスをなぞる（三角形）</li>
+<li>箱オブジェクトをロボットの右側に設置する．
+<img alt="image" src="https://ros-planning.github.io/moveit_tutorials/_images/move_group_interface_tutorial_robot_with_box.png" /></li>
+<li>ロボット箱オブジェクトを避けながら，指定された姿勢に移動する．</li>
+<li>オブジェクトがロボットの手首に取り付けられる．(色が紫・オレンジ・緑に変わる）</li>
+<li>環境からオブジェクトが取り除かれる</li>
+</ol>
+<h2 id="_4">全体のコード</h2>
+<p>ソースコード全体は<a href="https://github.com/ros-planning/moveit_tutorials/blob/master/doc/move_group_interface/src/move_group_interface_tutorial.cpp">MoveIt! GitHub Project</a>
+から見られます．つぎに，このソースコードを分割して機能を説明します．</p>
+<h3 id="_5">セットアップ</h3>
+<p>"planning group"と呼ばれるジョイント（関節）の集合をMoveIt!は操作し,
+それら(関節に関する情報)を<em>JointModelGroup</em>と呼ばれるオブジェクトに格納します．
+MoveIt!の説明文中では，"planning group"と"joint model group"はほぼ同じような意味を持って
+使われます．</p>
+<div class="highlight"><pre><span></span><span class="k">static</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">PLANNING_GROUP</span> <span class="o">=</span> <span class="s">&quot;panda_arm&quot;</span><span class="p">;</span>
+</pre></div>
+
+<p><a href="http://docs.ros.org/melodic/api/moveit_ros_planning_interface/html/classmoveit_1_1planning__interface_1_1MoveGroupInterface.html">MoveGroupInterface</a>
+クラスはあなたが使用したいplanning groupの名前を設定するだけで簡単にセットアップすることができます．</p>
+<div class="highlight"><pre><span></span><span class="n">moveit</span><span class="o">::</span><span class="n">planning_interface</span><span class="o">::</span><span class="n">MoveGroupInterface</span> <span class="n">move_group</span><span class="p">(</span><span class="n">PLANNING_GROUP</span><span class="p">);</span>
+</pre></div>
+
+<p>我々は<a href="http://docs.ros.org/melodic/api/moveit_ros_planning_interface/html/classmoveit_1_1planning__interface_1_1PlanningSceneInterface.html">PlanningSceneInterface</a>
+クラスを使用することで衝突物体を”仮想空間”に設置したり取り除いたりできます．</p>
+<div class="highlight"><pre><span></span><span class="n">moveit</span><span class="o">::</span><span class="n">planning_interface</span><span class="o">::</span><span class="n">PlanningSceneInterface</span> <span class="n">planning_scene_interface</span><span class="p">;</span>
+</pre></div>
+
+<p>生ポインターはパフォーマンスを向上させるために<code>plannning group</code>を参照するときに使用します．</p>
+<div class="highlight"><pre><span></span><span class="k">const</span> <span class="n">robot_state</span><span class="o">::</span><span class="n">JointModelGroup</span><span class="o">*</span> <span class="n">joint_model_group</span> <span class="o">=</span>
+    <span class="n">move_group</span><span class="p">.</span><span class="n">getCurrentState</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getJointModelGroup</span><span class="p">(</span><span class="n">PLANNING_GROUP</span><span class="p">);</span>
+</pre></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>生ポインターを使わずにスマートポインタを使用しましょう．</p>
+</div>
+<h3 id="_6">表示</h3>
+<p>MoveitVisualToolsパッケージはオブジェクト，ロボット，そして軌跡をRviz上で表示させるだけでなく
+ステップ・バイ・ステップでデバッグをすることもできます．</p>
+<div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">rvt</span> <span class="o">=</span> <span class="n">rviz_visual_tools</span><span class="p">;</span>
+<span class="n">moveit_visual_tools</span><span class="o">::</span><span class="n">MoveItVisualTools</span> <span class="n">visual_tools</span><span class="p">(</span><span class="s">&quot;panda_link0&quot;</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">deleteAllMarkers</span><span class="p">();</span>
+</pre></div>
+
+<p><code>remote control</code>はRvizのボタンを使用してコードをステップ・バイ・ステップで進めることが
+できるツールです．</p>
+<div class="highlight"><pre><span></span><span class="n">visual_tools</span><span class="p">.</span><span class="n">loadRemoteControl</span><span class="p">();</span>
+</pre></div>
+
+<p>Rvizはたくさんの種類のマーカーを提供します．このデモでは，テキスト，円柱，そして球を使用します．</p>
+<div class="highlight"><pre><span></span><span class="n">Eigen</span><span class="o">::</span><span class="n">Isometry3d</span> <span class="n">text_pose</span> <span class="o">=</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Isometry3d</span><span class="o">::</span><span class="n">Identity</span><span class="p">();</span>
+<span class="n">text_pose</span><span class="p">.</span><span class="n">translation</span><span class="p">().</span><span class="n">z</span><span class="p">()</span> <span class="o">=</span> <span class="mf">1.75</span><span class="p">;</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">publishText</span><span class="p">(</span><span class="n">text_pose</span><span class="p">,</span> <span class="s">&quot;MoveGroupInterface Demo&quot;</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">WHITE</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">XLARGE</span><span class="p">);</span>
+</pre></div>
+
+<p>まとめてトピックを発行することは大量に表示するときにRvizに送られるメッセージの量を減らせます．</p>
+<div class="highlight"><pre><span></span><span class="n">visual_tools</span><span class="p">.</span><span class="n">trigger</span><span class="p">();</span>
+</pre></div>
+
+<h3 id="_7">基本的な情報を取得する</h3>
+<p>我々が参照している座標系の名前を表示します．</p>
+<div class="highlight"><pre><span></span><span class="n">ROS_INFO_NAMED</span><span class="p">(</span><span class="s">&quot;tutorial&quot;</span><span class="p">,</span> <span class="s">&quot;Planning frame: %s&quot;</span><span class="p">,</span> <span class="n">move_group</span><span class="p">.</span><span class="n">getPlanningFrame</span><span class="p">().</span><span class="n">c_str</span><span class="p">());</span>
+</pre></div>
+
+<p>我々は，このグループに属しているエンドエフェクタ　リンクの名前を表示させることもできます．</p>
+<div class="highlight"><pre><span></span><span class="n">ROS_INFO_NAMED</span><span class="p">(</span><span class="s">&quot;tutorial&quot;</span><span class="p">,</span> <span class="s">&quot;End effector link: %s&quot;</span><span class="p">,</span> <span class="n">move_group</span><span class="p">.</span><span class="n">getEndEffectorLink</span><span class="p">().</span><span class="n">c_str</span><span class="p">());</span>
+</pre></div>
+
+<p>我々は，このロボットに存在するすべてのグループのリストを得ることもできます．</p>
+<div class="highlight"><pre><span></span><span class="n">ROS_INFO_NAMED</span><span class="p">(</span><span class="s">&quot;tutorial&quot;</span><span class="p">,</span> <span class="s">&quot;Available Planning Groups:&quot;</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">move_group</span><span class="p">.</span><span class="n">getJointModelGroupNames</span><span class="p">().</span><span class="n">begin</span><span class="p">(),</span> <span class="n">move_group</span><span class="p">.</span><span class="n">getJointModelGroupNames</span><span class="p">().</span><span class="n">end</span><span class="p">(),</span>
+          <span class="n">std</span><span class="o">::</span><span class="n">ostream_iterator</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">&quot;, &quot;</span><span class="p">));</span>
+</pre></div>
+
+<h2 id="_8">デモの開始</h2>
+<p>我々はエンドエフェクタを所望の姿勢にするための，軌道計画をすることができます．</p>
+<div class="highlight"><pre><span></span><span class="n">geometry_msgs</span><span class="o">::</span><span class="n">Pose</span> <span class="n">target_pose1</span><span class="p">;</span>
+<span class="n">target_pose1</span><span class="p">.</span><span class="n">orientation</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+<span class="n">target_pose1</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.28</span><span class="p">;</span>
+<span class="n">target_pose1</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">;</span>
+<span class="n">target_pose1</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">;</span>
+<span class="n">move_group</span><span class="p">.</span><span class="n">setPoseTarget</span><span class="p">(</span><span class="n">target_pose1</span><span class="p">);</span>
+</pre></div>
+
+<p>いま，軌道計画と表示のためにプランナーを呼び出します．
+我々は計画するだけだということに注意してください．<code>move_group</code>に実際のロボットの動作を
+命令するものではありません．</p>
+<div class="highlight"><pre><span></span><span class="n">moveit</span><span class="o">::</span><span class="n">planning_interface</span><span class="o">::</span><span class="n">MoveGroupInterface</span><span class="o">::</span><span class="n">Plan</span> <span class="n">my_plan</span><span class="p">;</span>
+
+<span class="kt">bool</span> <span class="n">success</span> <span class="o">=</span> <span class="p">(</span><span class="n">move_group</span><span class="p">.</span><span class="n">plan</span><span class="p">(</span><span class="n">my_plan</span><span class="p">)</span> <span class="o">==</span> <span class="n">moveit</span><span class="o">::</span><span class="n">planning_interface</span><span class="o">::</span><span class="n">MoveItErrorCode</span><span class="o">::</span><span class="n">SUCCESS</span><span class="p">);</span>
+
+<span class="n">ROS_INFO_NAMED</span><span class="p">(</span><span class="s">&quot;tutorial&quot;</span><span class="p">,</span> <span class="s">&quot;Visualizing plan 1 (pose goal) %s&quot;</span><span class="p">,</span> <span class="n">success</span> <span class="o">?</span> <span class="s">&quot;&quot;</span> <span class="o">:</span> <span class="s">&quot;FAILED&quot;</span><span class="p">);</span>
+</pre></div>
+
+<h3 id="_9">軌道計画の表示</h3>
+<p>Rviz上で直線マーカを利用して軌道計画を表示させられます．</p>
+<div class="highlight"><pre><span></span><span class="n">ROS_INFO_NAMED</span><span class="p">(</span><span class="s">&quot;tutorial&quot;</span><span class="p">,</span> <span class="s">&quot;Visualizing plan 1 as trajectory line&quot;</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">publishAxisLabeled</span><span class="p">(</span><span class="n">target_pose1</span><span class="p">,</span> <span class="s">&quot;pose1&quot;</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">publishText</span><span class="p">(</span><span class="n">text_pose</span><span class="p">,</span> <span class="s">&quot;Pose Goal&quot;</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">WHITE</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">XLARGE</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">publishTrajectoryLine</span><span class="p">(</span><span class="n">my_plan</span><span class="p">.</span><span class="n">trajectory_</span><span class="p">,</span> <span class="n">joint_model_group</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">trigger</span><span class="p">();</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">prompt</span><span class="p">(</span><span class="s">&quot;Press &#39;next&#39; in the RvizVisualToolsGui window to continue the demo&quot;</span><span class="p">);</span>
+</pre></div>
+
+<h3 id="_10">ゴールの姿勢に移動させる</h3>
+<p>ゴールの姿勢に移動することは<code>move()</code>関数を使用する以外は，上記のステップに似ています．
+以前に設定したゴールの姿勢は依然として有効で，そのために，ロボットはそのゴール姿勢に移動しようと試みます．
+今回，このチュートリアルでは<code>move()</code>関数は使用しません．なぜなら，この関数はブロッキング関数であり，有効なコントローラ
+と軌道を実行が成功したという反応が必要だからです．</p>
+<div class="highlight"><pre><span></span><span class="cm">/* Uncomment below line when working with a real robot */</span>
+<span class="cm">/* move_group.move(); */</span>
+</pre></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>要は，<code>move()</code>関数は実際のロボットとPCが接続されているときは，有効であり，実際のロボットが
+軌道計画を実行しますが，Rvizを使用して仮想的な環境下では利用するとデモが進まなくなってしまう
+ということです．</p>
+</div>
+<h3 id="_11">関節空間内でのゴールに対する軌道計画</h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>関節空間とは，３次元空間に対して使われる言葉で，簡単に言うと，{ $\theta$ }</p>
+</div>
+<p>関節空間内でのゴールを設定し，動かしてみましょう．これは上で設定した姿勢の目標を上書きします.</p>
+<p>始めるに当たって，現在のロボットの状態を指し示すポインタを作りましょう．<code>RobotState</code>は
+現在の位置・速度・加速度を保持しているオブジェクトです．</p>
+<div class="highlight"><pre><span></span><span class="n">moveit</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">RobotStatePtr</span> <span class="n">current_state</span> <span class="o">=</span> <span class="n">move_group</span><span class="p">.</span><span class="n">getCurrentState</span><span class="p">();</span>
+</pre></div>
+
+<p>次に，現在使用しているグループの現在のジョイント角度を求めましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">joint_group_positions</span><span class="p">;</span>
+<span class="n">current_state</span><span class="o">-&gt;</span><span class="n">copyJointGroupPositions</span><span class="p">(</span><span class="n">joint_model_group</span><span class="p">,</span> <span class="n">joint_group_positions</span><span class="p">);</span>
+</pre></div>
+
+<p>一つのジョイント角度を更新し，関節空間内の新たなゴールへ軌道計画を作成し，その軌道計画を
+表示してみましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">joint_group_positions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">;</span>  <span class="c1">// radians</span>
+<span class="n">move_group</span><span class="p">.</span><span class="n">setJointValueTarget</span><span class="p">(</span><span class="n">joint_group_positions</span><span class="p">);</span>
+
+<span class="n">success</span> <span class="o">=</span> <span class="p">(</span><span class="n">move_group</span><span class="p">.</span><span class="n">plan</span><span class="p">(</span><span class="n">my_plan</span><span class="p">)</span> <span class="o">==</span> <span class="n">moveit</span><span class="o">::</span><span class="n">planning_interface</span><span class="o">::</span><span class="n">MoveItErrorCode</span><span class="o">::</span><span class="n">SUCCESS</span><span class="p">);</span>
+<span class="n">ROS_INFO_NAMED</span><span class="p">(</span><span class="s">&quot;tutorial&quot;</span><span class="p">,</span> <span class="s">&quot;Visualizing plan 2 (joint space goal) %s&quot;</span><span class="p">,</span> <span class="n">success</span> <span class="o">?</span> <span class="s">&quot;&quot;</span> <span class="o">:</span> <span class="s">&quot;FAILED&quot;</span><span class="p">);</span>
+</pre></div>
+
+<p>Rvizで表示します．</p>
+<div class="highlight"><pre><span></span><span class="n">visual_tools</span><span class="p">.</span><span class="n">deleteAllMarkers</span><span class="p">();</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">publishText</span><span class="p">(</span><span class="n">text_pose</span><span class="p">,</span> <span class="s">&quot;Joint Space Goal&quot;</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">WHITE</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">XLARGE</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">publishTrajectoryLine</span><span class="p">(</span><span class="n">my_plan</span><span class="p">.</span><span class="n">trajectory_</span><span class="p">,</span> <span class="n">joint_model_group</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">trigger</span><span class="p">();</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">prompt</span><span class="p">(</span><span class="s">&quot;Press &#39;next&#39; in the RvizVisualToolsGui window to continue the demo&quot;</span><span class="p">);</span>
+</pre></div>
+
+<h3 id="_12">制約がある場合の軌道計画</h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>軌道上の制約</code>や<code>制約</code>はPath Constraintsを訳したものです．</p>
+</div>
+<p>ロボットのリンクに対して簡単に軌道上の制約を付け加えることが可能です．
+早速，軌道上の制約を付け加え，ゴールの姿勢を設定しましょう．</p>
+<p>では，まず，軌道上の制約を定義します．</p>
+<div class="highlight"><pre><span></span><span class="n">moveit_msgs</span><span class="o">::</span><span class="n">OrientationConstraint</span> <span class="n">ocm</span><span class="p">;</span>
+<span class="n">ocm</span><span class="p">.</span><span class="n">link_name</span> <span class="o">=</span> <span class="s">&quot;panda_link7&quot;</span><span class="p">;</span>
+<span class="n">ocm</span><span class="p">.</span><span class="n">header</span><span class="p">.</span><span class="n">frame_id</span> <span class="o">=</span> <span class="s">&quot;panda_link0&quot;</span><span class="p">;</span>
+<span class="n">ocm</span><span class="p">.</span><span class="n">orientation</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+<span class="n">ocm</span><span class="p">.</span><span class="n">absolute_x_axis_tolerance</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">;</span>
+<span class="n">ocm</span><span class="p">.</span><span class="n">absolute_y_axis_tolerance</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">;</span>
+<span class="n">ocm</span><span class="p">.</span><span class="n">absolute_z_axis_tolerance</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">;</span>
+<span class="n">ocm</span><span class="p">.</span><span class="n">weight</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+</pre></div>
+
+<p>次に，グループに対して軌道上の制約を付け加えます．</p>
+<div class="highlight"><pre><span></span><span class="n">moveit_msgs</span><span class="o">::</span><span class="n">Constraints</span> <span class="n">test_constraints</span><span class="p">;</span>
+<span class="n">test_constraints</span><span class="p">.</span><span class="n">orientation_constraints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">ocm</span><span class="p">);</span>
+<span class="n">move_group</span><span class="p">.</span><span class="n">setPathConstraints</span><span class="p">(</span><span class="n">test_constraints</span><span class="p">);</span>
+</pre></div>
+
+<p>我々は，以前に軌道計画を計算したゴールを再利用します．
+これは，現在のロボットの状態がすでに軌道上の制約を満たしているときにのみ
+有効であることに注意してください．
+そのため，我々は新しいロボットにスタート状態を設定する必要があります．</p>
+<div class="highlight"><pre><span></span><span class="n">robot_state</span><span class="o">::</span><span class="n">RobotState</span> <span class="n">start_state</span><span class="p">(</span><span class="o">*</span><span class="n">move_group</span><span class="p">.</span><span class="n">getCurrentState</span><span class="p">());</span>
+<span class="n">geometry_msgs</span><span class="o">::</span><span class="n">Pose</span> <span class="n">start_pose2</span><span class="p">;</span>
+<span class="n">start_pose2</span><span class="p">.</span><span class="n">orientation</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+<span class="n">start_pose2</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.55</span><span class="p">;</span>
+<span class="n">start_pose2</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.05</span><span class="p">;</span>
+<span class="n">start_pose2</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">;</span>
+<span class="n">start_state</span><span class="p">.</span><span class="n">setFromIK</span><span class="p">(</span><span class="n">joint_model_group</span><span class="p">,</span> <span class="n">start_pose2</span><span class="p">);</span>
+<span class="n">move_group</span><span class="p">.</span><span class="n">setStartState</span><span class="p">(</span><span class="n">start_state</span><span class="p">);</span>
+</pre></div>
+
+<p>それでは，設定したばかりの新しいスタート状態からより早いゴール姿勢への軌道計画を計算します．</p>
+<div class="highlight"><pre><span></span><span class="n">move_group</span><span class="p">.</span><span class="n">setPoseTarget</span><span class="p">(</span><span class="n">target_pose1</span><span class="p">);</span>
+</pre></div>
+
+<p>制約がある状態で軌道計画を計算するのは，なしの状態と比べて遅くなる可能性があります．
+なぜなら，制約がある場合は，すべてのサンプルごとに逆運動学を計算する必要があるからです．
+デフォルトの５秒から十分に計算して解を発見できるように計算時間を増やしておきましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">move_group</span><span class="p">.</span><span class="n">setPlanningTime</span><span class="p">(</span><span class="mf">10.0</span><span class="p">);</span>
+
+<span class="n">success</span> <span class="o">=</span> <span class="p">(</span><span class="n">move_group</span><span class="p">.</span><span class="n">plan</span><span class="p">(</span><span class="n">my_plan</span><span class="p">)</span> <span class="o">==</span> <span class="n">moveit</span><span class="o">::</span><span class="n">planning_interface</span><span class="o">::</span><span class="n">MoveItErrorCode</span><span class="o">::</span><span class="n">SUCCESS</span><span class="p">);</span>
+<span class="n">ROS_INFO_NAMED</span><span class="p">(</span><span class="s">&quot;tutorial&quot;</span><span class="p">,</span> <span class="s">&quot;Visualizing plan 3 (constraints) %s&quot;</span><span class="p">,</span> <span class="n">success</span> <span class="o">?</span> <span class="s">&quot;&quot;</span> <span class="o">:</span> <span class="s">&quot;FAILED&quot;</span><span class="p">);</span>
+</pre></div>
+
+<p>Rvizで表示してみましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">visual_tools</span><span class="p">.</span><span class="n">deleteAllMarkers</span><span class="p">();</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">publishAxisLabeled</span><span class="p">(</span><span class="n">start_pose2</span><span class="p">,</span> <span class="s">&quot;start&quot;</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">publishAxisLabeled</span><span class="p">(</span><span class="n">target_pose1</span><span class="p">,</span> <span class="s">&quot;goal&quot;</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">publishText</span><span class="p">(</span><span class="n">text_pose</span><span class="p">,</span> <span class="s">&quot;Constrained Goal&quot;</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">WHITE</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">XLARGE</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">publishTrajectoryLine</span><span class="p">(</span><span class="n">my_plan</span><span class="p">.</span><span class="n">trajectory_</span><span class="p">,</span> <span class="n">joint_model_group</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">trigger</span><span class="p">();</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">prompt</span><span class="p">(</span><span class="s">&quot;next step&quot;</span><span class="p">);</span>
+</pre></div>
+
+<p>もし，うまく行ったら制約を消しておきましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">move_group</span><span class="p">.</span><span class="n">clearPathConstraints</span><span class="p">();</span>
+</pre></div>
+
+<h2 id="_13">直交座標系の軌道</h2>
+<p>もちろん，あなたは，エンドエフェクタが通っていくウェイポイント（経由点）を指定して
+直行座標系の軌道計画を作成することもできます．
+現在，上述のスタート状態から始めていることに注意してください．
+最初の状態(スタート状態）はウェイポイントに加える必要はないのですが，
+表示のために加えておきます．</p>
+<div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">geometry_msgs</span><span class="o">::</span><span class="n">Pose</span><span class="o">&gt;</span> <span class="n">waypoints</span><span class="p">;</span>
+<span class="n">waypoints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">start_pose2</span><span class="p">);</span>
+
+<span class="n">geometry_msgs</span><span class="o">::</span><span class="n">Pose</span> <span class="n">target_pose3</span> <span class="o">=</span> <span class="n">start_pose2</span><span class="p">;</span>
+
+<span class="n">target_pose3</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">z</span> <span class="o">-=</span> <span class="mf">0.2</span><span class="p">;</span>
+<span class="n">waypoints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">target_pose3</span><span class="p">);</span>  <span class="c1">// down</span>
+
+<span class="n">target_pose3</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">y</span> <span class="o">-=</span> <span class="mf">0.2</span><span class="p">;</span>
+<span class="n">waypoints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">target_pose3</span><span class="p">);</span>  <span class="c1">// right</span>
+
+<span class="n">target_pose3</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">z</span> <span class="o">+=</span> <span class="mf">0.2</span><span class="p">;</span>
+<span class="n">target_pose3</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="mf">0.2</span><span class="p">;</span>
+<span class="n">target_pose3</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">x</span> <span class="o">-=</span> <span class="mf">0.2</span><span class="p">;</span>
+<span class="n">waypoints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">target_pose3</span><span class="p">);</span>  <span class="c1">// up and left</span>
+</pre></div>
+
+<p>直交座標系で動きを指定することは，よく，物体へのアプローチやつかむ動作で行われます．
+それらの動作はしばしば，ゆっくりな速度で実行されます．
+ここでは，各ジョイントの最大速度に対する<code>scaling fanctor</code>を用いて，速度の減速を行います．
+<strong>ここで言う速度は，手先の速度では無いことに注意してください．</strong></p>
+<div class="highlight"><pre><span></span><span class="n">move_group</span><span class="p">.</span><span class="n">setMaxVelocityScalingFactor</span><span class="p">(</span><span class="mf">0.1</span><span class="p">);</span>
+</pre></div>
+
+<p>直交座標系において１ｃｍで補間をする必要があるため，直交座標系に変換するときの
+最大ステップとして０．０１を指定します．また，<code>jump threshold</code>を０．０に設定することにより
+効果的に<code>jump threshold</code>を無効にします．</p>
+<div class="admonition worn">
+<p class="admonition-title">Worn</p>
+<p><code>jump threshold</code>を現実のロボットで無効にすることは，大きな予想できない冗長な動きを
+引き起こし，安全性に対する問題を引き起こすかもしれません．</p>
+</div>
+<div class="highlight"><pre><span></span><span class="n">moveit_msgs</span><span class="o">::</span><span class="n">RobotTrajectory</span> <span class="n">trajectory</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">double</span> <span class="n">jump_threshold</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">double</span> <span class="n">eef_step</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">fraction</span> <span class="o">=</span> <span class="n">move_group</span><span class="p">.</span><span class="n">computeCartesianPath</span><span class="p">(</span><span class="n">waypoints</span><span class="p">,</span> <span class="n">eef_step</span><span class="p">,</span> <span class="n">jump_threshold</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">);</span>
+<span class="n">ROS_INFO_NAMED</span><span class="p">(</span><span class="s">&quot;tutorial&quot;</span><span class="p">,</span> <span class="s">&quot;Visualizing plan 4 (Cartesian path) (%.2f%% acheived)&quot;</span><span class="p">,</span> <span class="n">fraction</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">);</span>
+</pre></div>
+
+<p>Rvizで表示しましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">visual_tools</span><span class="p">.</span><span class="n">deleteAllMarkers</span><span class="p">();</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">publishText</span><span class="p">(</span><span class="n">text_pose</span><span class="p">,</span> <span class="s">&quot;Joint Space Goal&quot;</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">WHITE</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">XLARGE</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">publishPath</span><span class="p">(</span><span class="n">waypoints</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">LIME_GREEN</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">SMALL</span><span class="p">);</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">waypoints</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+  <span class="n">visual_tools</span><span class="p">.</span><span class="n">publishAxisLabeled</span><span class="p">(</span><span class="n">waypoints</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s">&quot;pt&quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">rvt</span><span class="o">::</span><span class="n">SMALL</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">trigger</span><span class="p">();</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">prompt</span><span class="p">(</span><span class="s">&quot;Press &#39;next&#39; in the RvizVisualToolsGui window to continue the demo&quot;</span><span class="p">);</span>
+</pre></div>
+
+<h2 id="_14">オブジェクトの追加・削除とオブジェクトの取り付け・取り除き</h2>
+<p>衝突オブジェクトをROSメッセージとして定義します．</p>
+<div class="highlight"><pre><span></span><span class="n">moveit_msgs</span><span class="o">::</span><span class="n">CollisionObject</span> <span class="n">collision_object</span><span class="p">;</span>
+<span class="n">collision_object</span><span class="p">.</span><span class="n">header</span><span class="p">.</span><span class="n">frame_id</span> <span class="o">=</span> <span class="n">move_group</span><span class="p">.</span><span class="n">getPlanningFrame</span><span class="p">();</span>
+</pre></div>
+
+<p>idはそのオブジェクトを特定するために使用されます．</p>
+<div class="highlight"><pre><span></span><span class="n">collision_object</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;box1&quot;</span><span class="p">;</span>
+</pre></div>
+
+<p>箱オブジェクトの定義と仮想世界への追加をします．</p>
+<div class="highlight"><pre><span></span><span class="n">shape_msgs</span><span class="o">::</span><span class="n">SolidPrimitive</span> <span class="n">primitive</span><span class="p">;</span>
+<span class="n">primitive</span><span class="p">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">primitive</span><span class="p">.</span><span class="n">BOX</span><span class="p">;</span>
+<span class="n">primitive</span><span class="p">.</span><span class="n">dimensions</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="n">primitive</span><span class="p">.</span><span class="n">dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">;</span>
+<span class="n">primitive</span><span class="p">.</span><span class="n">dimensions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">;</span>
+<span class="n">primitive</span><span class="p">.</span><span class="n">dimensions</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">;</span>
+</pre></div>
+
+<p>箱オブジェクトの姿勢を定義します．（frame_idを基準にして指定）</p>
+<div class="highlight"><pre><span></span><span class="n">geometry_msgs</span><span class="o">::</span><span class="n">Pose</span> <span class="n">box_pose</span><span class="p">;</span>
+<span class="n">box_pose</span><span class="p">.</span><span class="n">orientation</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+<span class="n">box_pose</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">;</span>
+<span class="n">box_pose</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">;</span>
+<span class="n">box_pose</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+
+<span class="n">collision_object</span><span class="p">.</span><span class="n">primitives</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">primitive</span><span class="p">);</span>
+<span class="n">collision_object</span><span class="p">.</span><span class="n">primitive_poses</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">box_pose</span><span class="p">);</span>
+<span class="n">collision_object</span><span class="p">.</span><span class="n">operation</span> <span class="o">=</span> <span class="n">collision_object</span><span class="p">.</span><span class="n">ADD</span><span class="p">;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">moveit_msgs</span><span class="o">::</span><span class="n">CollisionObject</span><span class="o">&gt;</span> <span class="n">collision_objects</span><span class="p">;</span>
+<span class="n">collision_objects</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">collision_object</span><span class="p">);</span>
+</pre></div>
+
+<p>さあ！衝突可能な箱オブジェクトを仮想世界に挿入しましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">ROS_INFO_NAMED</span><span class="p">(</span><span class="s">&quot;tutorial&quot;</span><span class="p">,</span> <span class="s">&quot;Add an object into the world&quot;</span><span class="p">);</span>
+<span class="n">planning_scene_interface</span><span class="p">.</span><span class="n">addCollisionObjects</span><span class="p">(</span><span class="n">collision_objects</span><span class="p">);</span>
+</pre></div>
+
+<p>状態をテキストでRvizで表示しましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">visual_tools</span><span class="p">.</span><span class="n">publishText</span><span class="p">(</span><span class="n">text_pose</span><span class="p">,</span> <span class="s">&quot;Add object&quot;</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">WHITE</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">XLARGE</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">trigger</span><span class="p">();</span>
+</pre></div>
+
+<p>MoveGroupが衝突オブジェクトのROSメッセージを受取り，処理するのを待ちましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">visual_tools</span><span class="p">.</span><span class="n">prompt</span><span class="p">(</span><span class="s">&quot;Press &#39;next&#39; in the RvizVisualToolsGui window to once the collision object appears in RViz&quot;</span><span class="p">);</span>
+</pre></div>
+
+<p>これにより，我々は箱オブジェクトを避けて軌道計画を計算することが可能になりました．</p>
+<div class="highlight"><pre><span></span><span class="n">move_group</span><span class="p">.</span><span class="n">setStartState</span><span class="p">(</span><span class="o">*</span><span class="n">move_group</span><span class="p">.</span><span class="n">getCurrentState</span><span class="p">());</span>
+<span class="n">geometry_msgs</span><span class="o">::</span><span class="n">Pose</span> <span class="n">another_pose</span><span class="p">;</span>
+<span class="n">another_pose</span><span class="p">.</span><span class="n">orientation</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+<span class="n">another_pose</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">;</span>
+<span class="n">another_pose</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.4</span><span class="p">;</span>
+<span class="n">another_pose</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">;</span>
+<span class="n">move_group</span><span class="p">.</span><span class="n">setPoseTarget</span><span class="p">(</span><span class="n">another_pose</span><span class="p">);</span>
+
+<span class="n">success</span> <span class="o">=</span> <span class="p">(</span><span class="n">move_group</span><span class="p">.</span><span class="n">plan</span><span class="p">(</span><span class="n">my_plan</span><span class="p">)</span> <span class="o">==</span> <span class="n">moveit</span><span class="o">::</span><span class="n">planning_interface</span><span class="o">::</span><span class="n">MoveItErrorCode</span><span class="o">::</span><span class="n">SUCCESS</span><span class="p">);</span>
+<span class="n">ROS_INFO_NAMED</span><span class="p">(</span><span class="s">&quot;tutorial&quot;</span><span class="p">,</span> <span class="s">&quot;Visualizing plan 5 (pose goal move around cuboid) %s&quot;</span><span class="p">,</span> <span class="n">success</span> <span class="o">?</span> <span class="s">&quot;&quot;</span> <span class="o">:</span> <span class="s">&quot;FAILED&quot;</span><span class="p">);</span>
+</pre></div>
+
+<p>Rvizで表示しましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">visual_tools</span><span class="p">.</span><span class="n">deleteAllMarkers</span><span class="p">();</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">publishText</span><span class="p">(</span><span class="n">text_pose</span><span class="p">,</span> <span class="s">&quot;Obstacle Goal&quot;</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">WHITE</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">XLARGE</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">publishTrajectoryLine</span><span class="p">(</span><span class="n">my_plan</span><span class="p">.</span><span class="n">trajectory_</span><span class="p">,</span> <span class="n">joint_model_group</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">trigger</span><span class="p">();</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">prompt</span><span class="p">(</span><span class="s">&quot;next step&quot;</span><span class="p">);</span>
+</pre></div>
+
+<p>さあ，衝突オブジェクトをロボットに取り付けてみましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">ROS_INFO_NAMED</span><span class="p">(</span><span class="s">&quot;tutorial&quot;</span><span class="p">,</span> <span class="s">&quot;Attach the object to the robot&quot;</span><span class="p">);</span>
+<span class="n">move_group</span><span class="p">.</span><span class="n">attachObject</span><span class="p">(</span><span class="n">collision_object</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
+</pre></div>
+
+<p>Rvizでテキストを用いて状態を表示しましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">visual_tools</span><span class="p">.</span><span class="n">publishText</span><span class="p">(</span><span class="n">text_pose</span><span class="p">,</span> <span class="s">&quot;Object attached to robot&quot;</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">WHITE</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">XLARGE</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">trigger</span><span class="p">();</span>
+
+<span class="cm">/* Wait for MoveGroup to recieve and process the attached collision object message */</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">prompt</span><span class="p">(</span><span class="s">&quot;Press &#39;next&#39; in the RvizVisualToolsGui window to once the collision object attaches to the &quot;</span>
+                    <span class="s">&quot;robot&quot;</span><span class="p">);</span>
+</pre></div>
+
+<p>さあ，衝突オブジェクトをロボットから取り外しましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">ROS_INFO_NAMED</span><span class="p">(</span><span class="s">&quot;tutorial&quot;</span><span class="p">,</span> <span class="s">&quot;Detach the object from the robot&quot;</span><span class="p">);</span>
+<span class="n">move_group</span><span class="p">.</span><span class="n">detachObject</span><span class="p">(</span><span class="n">collision_object</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
+</pre></div>
+
+<p>Rvizで状態をテキストで表示しましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">visual_tools</span><span class="p">.</span><span class="n">publishText</span><span class="p">(</span><span class="n">text_pose</span><span class="p">,</span> <span class="s">&quot;Object dettached from robot&quot;</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">WHITE</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">XLARGE</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">trigger</span><span class="p">();</span>
+
+<span class="cm">/* Wait for MoveGroup to recieve and process the attached collision object message */</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">prompt</span><span class="p">(</span><span class="s">&quot;Press &#39;next&#39; in the RvizVisualToolsGui window to once the collision object detaches to the &quot;</span>
+                    <span class="s">&quot;robot&quot;</span><span class="p">);</span>
+</pre></div>
+
+<p>さあ，衝突オブジェクトを仮想世界から取り除きましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">ROS_INFO_NAMED</span><span class="p">(</span><span class="s">&quot;tutorial&quot;</span><span class="p">,</span> <span class="s">&quot;Remove the object from the world&quot;</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">object_ids</span><span class="p">;</span>
+<span class="n">object_ids</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">collision_object</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
+<span class="n">planning_scene_interface</span><span class="p">.</span><span class="n">removeCollisionObjects</span><span class="p">(</span><span class="n">object_ids</span><span class="p">);</span>
+</pre></div>
+
+<p>Rvizで状態をテキストで表示しましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">visual_tools</span><span class="p">.</span><span class="n">publishText</span><span class="p">(</span><span class="n">text_pose</span><span class="p">,</span> <span class="s">&quot;Object removed&quot;</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">WHITE</span><span class="p">,</span> <span class="n">rvt</span><span class="o">::</span><span class="n">XLARGE</span><span class="p">);</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">trigger</span><span class="p">();</span>
+
+<span class="cm">/* Wait for MoveGroup to recieve and process the attached collision object message */</span>
+<span class="n">visual_tools</span><span class="p">.</span><span class="n">prompt</span><span class="p">(</span><span class="s">&quot;Press &#39;next&#39; in the RvizVisualToolsGui window to once the collision object disapears&quot;</span><span class="p">);</span>
+</pre></div>
+
+<h2 id="launch">Launchファイル</h2>
+<p>全部のlaunchファイルは<a href="https://github.com/ros-planning/moveit_tutorials/blob/master/doc/move_group_interface/launch/move_group_interface_tutorial.launch">ここ</a>のGitHub上
+から入手できます．</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../4/" class="btn btn-neutral float-right" title="Robot ModelとRobot State">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../2/" class="btn btn-neutral" title="MoveIt!のクイックスタート．Rvizとともに"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../2/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../4/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+      <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

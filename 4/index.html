@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Harumo Sasatake">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Robot ModelとRobot State - MoveIt! Japanese!</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link href="https://unpkg.com/mermaid@7.1.2/dist/mermaid.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Robot Model\u3068Robot State";
+    var mkdocs_page_input_path = "4.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> MoveIt! Japanese!</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">MoveIt!のチュートリアル</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../1/">ここから始めよう!</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../2/">MoveIt!のクイックスタート．Rvizとともに</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../3/">Move Group C++ インターフェース</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Robot ModelとRobot State</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#robot-modelrobot-state">Robot ModelとRobot State</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#robotmodelrobotstate">RobotModelクラスとRobotStateクラス</a></li>
+        
+            <li><a class="toctree-l3" href="#_1">ここから始めよう！</a></li>
+        
+            <li><a class="toctree-l3" href="#_2">コードの実行</a></li>
+        
+            <li><a class="toctree-l3" href="#_3">予想される結果</a></li>
+        
+            <li><a class="toctree-l3" href="#_4">コード全体</a></li>
+        
+            <li><a class="toctree-l3" href="#robot-state">Robot Stateのデバッグ</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../5/">プランニングシーン</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../dot/">Dot</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../mermaid/">H</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">MoveIt! Japanese!</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Robot ModelとRobot State</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="robot-modelrobot-state">Robot ModelとRobot State</h1>
+<p><img alt="image" src="https://ros-planning.github.io/moveit_tutorials/_images/panda_tf.png" /></p>
+<p>この章ではC++を利用してMoveIt!の運動学について説明します．</p>
+<h2 id="robotmodelrobotstate"><code>RobotModel</code>クラスと<code>RobotState</code>クラス</h2>
+<p><a href="http://docs.ros.org/melodic/api/moveit_core/html/classmoveit_1_1core_1_1RobotModel.html">RobotModel</a>
+クラスと
+<a href="http://docs.ros.org/melodic/api/moveit_core/html/classmoveit_1_1core_1_1RobotState.html">RobotState</a>
+クラスを利用してロボットの運動学に関する情報へアクセスすることが可能です．</p>
+<p><a href="http://docs.ros.org/melodic/api/moveit_core/html/classmoveit_1_1core_1_1RobotModel.html">RobotModel</a>
+クラスはURDFから読み込んだすべてのジョイントとリンクの関係(ジョイントの可動範囲を含む）に
+関する情報を保持しています．
+また，RobotModelクラスはSRDFで定義されたプランニンググループにリンクとジョイントを分けることも
+行います．</p>
+<p>URDFとSRDFのチュートリアルについては<a href="https://ros-planning.github.io/moveit_tutorials/doc/urdf_srdf/urdf_srdf_tutorial.html">URDF and SRDF Tutorial</a>
+を参照してください．</p>
+<p><a href="http://docs.ros.org/melodic/api/moveit_core/html/classmoveit_1_1core_1_1RobotState.html">RobotState</a>
+クラスは現在のロボットのスナップショットを保持しています．
+たとえば，ジョイントの位置，速度（任意），加速度（任意）です．
+これらはヤコビアンやエンドエフェクタなどの現在の状態に依存する運動学の情報を得るために使用されます．</p>
+<p>RobotStateはヘルパー関数も有しています．
+それらを用いてエンドエフェクタの位置（直交座標系）や直交座標系の軌道に基づいたアームの位置を設定すること
+ができます．</p>
+<p>この例では，pandaロボットを用いてそれらのクラスの使い方を見ていきます．</p>
+<h2 id="_1">ここから始めよう！</h2>
+<p>あー，なんと言えばいいのか，皆目検討もつかないが，いや，しかし，端的に言うならば
+<a href="../1/">ここから始めよう！</a>から始めてくれないか．</p>
+<h2 id="_2">コードの実行</h2>
+<p>このチュートリアルでコンパイルや実行されるすべてのソースコードはMoveIt!のセットアップの一環として
+あなたが準備した<code>moveit_tutorial</code>パッケージの中にあります．</p>
+<p><code>moveit_tutorial</code>パッケージからlaunchファイルを立ち上げます．</p>
+<div class="highlight"><pre><span></span>roslaunch moveit_tutorials robot_model_and_robot_state_tutorial.launch
+</pre></div>
+
+<h2 id="_3">予想される結果</h2>
+<p>予想される出力は下記のとおりです．今回，ジョイントの角度はランダムな値になるので
+数字は異なっていると思います．</p>
+<div class="highlight"><pre><span></span>ros.moveit_tutorials: Model frame: /panda_link0
+ros.moveit_tutorials: Joint panda_joint1: <span class="m">0</span>.000000
+ros.moveit_tutorials: Joint panda_joint2: <span class="m">0</span>.000000
+ros.moveit_tutorials: Joint panda_joint3: <span class="m">0</span>.000000
+ros.moveit_tutorials: Joint panda_joint4: <span class="m">0</span>.000000
+ros.moveit_tutorials: Joint panda_joint5: <span class="m">0</span>.000000
+ros.moveit_tutorials: Joint panda_joint6: <span class="m">0</span>.000000
+ros.moveit_tutorials: Joint panda_joint7: <span class="m">0</span>.000000
+ros.moveit_tutorials: Current state is not valid
+ros.moveit_tutorials: Current state is valid
+ros.moveit_tutorials: Translation:
+-0.541498
+-0.592805
+ <span class="m">0</span>.400443
+
+ros.moveit_tutorials: Rotation:
+-0.395039  <span class="m">0</span>.600666 -0.695086
+ <span class="m">0</span>.299981 -0.630807 -0.715607
+-0.868306 -0.491205 <span class="m">0</span>.0690048
+
+ros.moveit_tutorials: Joint panda_joint1: -2.407308
+ros.moveit_tutorials: Joint panda_joint2: <span class="m">1</span>.555370
+ros.moveit_tutorials: Joint panda_joint3: -2.102171
+ros.moveit_tutorials: Joint panda_joint4: -0.011156
+ros.moveit_tutorials: Joint panda_joint5: <span class="m">1</span>.100545
+ros.moveit_tutorials: Joint panda_joint6: <span class="m">3</span>.230793
+ros.moveit_tutorials: Joint panda_joint7: -2.651568
+ros.moveit_tutorials: Jacobian:
+    <span class="m">0</span>.592805   -0.0500638    -0.036041     <span class="m">0</span>.366761   -0.0334361     <span class="m">0</span>.128712 -4.33681e-18
+   -0.541498   -0.0451907    <span class="m">0</span>.0417049    -0.231187    <span class="m">0</span>.0403683   <span class="m">0</span>.00288573  <span class="m">3</span>.46945e-18
+           <span class="m">0</span>    -0.799172    <span class="m">0</span>.0772022    -0.247151    <span class="m">0</span>.0818336    <span class="m">0</span>.0511662            <span class="m">0</span>
+           <span class="m">0</span>     <span class="m">0</span>.670056    -0.742222     <span class="m">0</span>.349402    -0.748556    -0.344057    -0.695086
+           <span class="m">0</span>     -0.74231    -0.669976    -0.367232    -0.662737     <span class="m">0</span>.415389    -0.715607
+           <span class="m">1</span>  <span class="m">4</span>.89669e-12    <span class="m">0</span>.0154256     <span class="m">0</span>.862009     <span class="m">0</span>.021077     <span class="m">0</span>.842067    <span class="m">0</span>.0690048
+</pre></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>もし，あなたの出力(ROS console logger)が異なっていても気にしないでください．<a href="http://dav.ee/blog/notes/archives/898">このブログ</a>
+をもとにして出力の設定を変更することができます．</p>
+</div>
+<h2 id="_4">コード全体</h2>
+<p>ソースコード全体は<a href="https://github.com/ros-planning/moveit_tutorials/blob/master/doc/robot_model_and_robot_state/src/robot_model_and_robot_state_tutorial.cpp">ここ</a>
+から取得できます．</p>
+<h3 id="_5">スタート</h3>
+<p><code>RobotModel</code>クラスを使い始めるためのセットアップはものすごく簡単です．
+一般的には，最も高いレベルのコンポーネント(例えば，RobotModelLoaderクラス)がRobotModelクラスのshared_ptrを返すことになります．
+もし，これが可能であれば，この方法を利用してください．
+この例ではそのようなshared_ptrから始めて，基本的なAPIに絞って説明していきます．
+このクラスが提供するより詳細な機能についてはソースコードを直に読むことで，
+それらに関する情報が得られます．</p>
+<p><a href="http://docs.ros.org/melodic/api/moveit_ros_planning/html/classrobot__model__loader_1_1RobotModelLoader.html">RobotModelLoader</a>
+クラスのインスタンスを得るとことから話を始めます．<code>RobotModelLoader</code>はROSパラメータサーバから
+ロボットに関する情報(robot_description)を見つけてきて<code>RobotModel</code>クラスを生成します．</p>
+<div class="highlight"><pre><span></span><span class="n">robot_model_loader</span><span class="o">::</span><span class="n">RobotModelLoader</span> <span class="n">robot_model_loader</span><span class="p">(</span><span class="s">&quot;robot_description&quot;</span><span class="p">);</span>
+<span class="n">robot_model</span><span class="o">::</span><span class="n">RobotModelPtr</span> <span class="n">kinematic_model</span> <span class="o">=</span> <span class="n">robot_model_loader</span><span class="p">.</span><span class="n">getModel</span><span class="p">();</span>
+<span class="n">ROS_INFO</span><span class="p">(</span><span class="s">&quot;Model frame: %s&quot;</span><span class="p">,</span> <span class="n">kinematic_model</span><span class="o">-&gt;</span><span class="n">getModelFrame</span><span class="p">().</span><span class="n">c_str</span><span class="p">());</span>
+</pre></div>
+
+<p><code>RobotModel</code>クラスを利用することで，我々はロボットに関する設定を司る<code>RobotState</code>クラス
+を生成することができます．状態内のすべてのジョイントをデフォルト値に設定します．
+そのときに，<a href="http://docs.ros.org/melodic/api/moveit_core/html/classmoveit_1_1core_1_1JointModelGroup.html">JointModelGroup</a>を
+利用することができます．このクラスは特定のグループに関するロボットのモデルを表しています．
+例えば，Panda robotの"panda_arm"とかのグループのことです．このグループはアームの根本から
+先端までのモデルを有しています．他のグループだと，グリッパー部分だけのモデルを有するグループなどが
+あります．具体的にモデルとはリンクの長さ，ジョイントの稼働限界などのリンクとジョイントに関する全情報のことだと考えてください．</p>
+<div class="highlight"><pre><span></span><span class="n">robot_state</span><span class="o">::</span><span class="n">RobotStatePtr</span> <span class="n">kinematic_state</span><span class="p">(</span><span class="k">new</span> <span class="n">robot_state</span><span class="o">::</span><span class="n">RobotState</span><span class="p">(</span><span class="n">kinematic_model</span><span class="p">));</span>
+<span class="n">kinematic_state</span><span class="o">-&gt;</span><span class="n">setToDefaultValues</span><span class="p">();</span>
+<span class="k">const</span> <span class="n">robot_state</span><span class="o">::</span><span class="n">JointModelGroup</span><span class="o">*</span> <span class="n">joint_model_group</span> <span class="o">=</span> <span class="n">kinematic_model</span><span class="o">-&gt;</span><span class="n">getJointModelGroup</span><span class="p">(</span><span class="s">&quot;panda_arm&quot;</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">joint_names</span> <span class="o">=</span> <span class="n">joint_model_group</span><span class="o">-&gt;</span><span class="n">getVariableNames</span><span class="p">();</span>
+</pre></div>
+
+<h3 id="_6">ジョイントの値を得る</h3>
+<p>我々は，Panda Armの状態に保持されている現在のジョイント角度も得ることができます．</p>
+<div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">joint_values</span><span class="p">;</span>
+<span class="n">kinematic_state</span><span class="o">-&gt;</span><span class="n">copyJointGroupPositions</span><span class="p">(</span><span class="n">joint_model_group</span><span class="p">,</span> <span class="n">joint_values</span><span class="p">);</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">joint_names</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">ROS_INFO</span><span class="p">(</span><span class="s">&quot;Joint %s: %f&quot;</span><span class="p">,</span> <span class="n">joint_names</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">joint_values</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="p">}</span>
+</pre></div>
+
+<h3 id="_7">ジョイントの稼働限界</h3>
+<p><code>setJointGroupPosition()</code>だけではジョイントに新たな稼働限界を設定することはできません．
+さらに，<code>enforceBounds()</code>を呼ぶことで設定を行います．</p>
+<div class="highlight"><pre><span></span><span class="cm">/* Set one joint in the Panda arm outside its joint limit */</span>
+<span class="n">joint_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5.57</span><span class="p">;</span>
+<span class="n">kinematic_state</span><span class="o">-&gt;</span><span class="n">setJointGroupPositions</span><span class="p">(</span><span class="n">joint_model_group</span><span class="p">,</span> <span class="n">joint_values</span><span class="p">);</span>
+
+<span class="cm">/* Check whether any joint is outside its joint limits */</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Current state is &quot;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">kinematic_state</span><span class="o">-&gt;</span><span class="n">satisfiesBounds</span><span class="p">()</span> <span class="o">?</span> <span class="s">&quot;valid&quot;</span> <span class="o">:</span> <span class="s">&quot;not valid&quot;</span><span class="p">));</span>
+
+<span class="cm">/* Enforce the joint limits for this state and check again*/</span>
+<span class="n">kinematic_state</span><span class="o">-&gt;</span><span class="n">enforceBounds</span><span class="p">();</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Current state is &quot;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">kinematic_state</span><span class="o">-&gt;</span><span class="n">satisfiesBounds</span><span class="p">()</span> <span class="o">?</span> <span class="s">&quot;valid&quot;</span> <span class="o">:</span> <span class="s">&quot;not valid&quot;</span><span class="p">));</span>
+</pre></div>
+
+<h3 id="_8">順運動学</h3>
+<p>さあ，いよいよ，我々は順運動学を計算します．今回はランダムなジョイント角度に
+ジョイントの値を変更します．我々が順運動学を計算して姿勢を見つけたい"panda_link8"は"panda_arm"グループにおける最もアームの根本から
+遠いリンクであることに注意してください．</p>
+<div class="highlight"><pre><span></span><span class="n">kinematic_state</span><span class="o">-&gt;</span><span class="n">setToRandomPositions</span><span class="p">(</span><span class="n">joint_model_group</span><span class="p">);</span>
+<span class="k">const</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Isometry3d</span><span class="o">&amp;</span> <span class="n">end_effector_state</span> <span class="o">=</span> <span class="n">kinematic_state</span><span class="o">-&gt;</span><span class="n">getGlobalLinkTransform</span><span class="p">(</span><span class="s">&quot;panda_link8&quot;</span><span class="p">);</span>
+
+<span class="cm">/* Print end-effector pose. Remember that this is in the model frame */</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Translation: </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">end_effector_state</span><span class="p">.</span><span class="n">translation</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Rotation: </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">end_effector_state</span><span class="p">.</span><span class="n">rotation</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</pre></div>
+
+<h3 id="_9">逆運動学</h3>
+<p>もちろん，我々は逆運動学(a.k.a IK)を解くことができます．
+IKを解くために，下記の項目が必要です．</p>
+<ul>
+<li>エンドエフェクタの所望の姿勢（デフォルトでは，これは"panda_arm"グループの最後のリンクです）</li>
+<li>タイムアウト: 0.01秒</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kt">double</span> <span class="n">timeout</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">;</span>
+<span class="kt">bool</span> <span class="n">found_ik</span> <span class="o">=</span> <span class="n">kinematic_state</span><span class="o">-&gt;</span><span class="n">setFromIK</span><span class="p">(</span><span class="n">joint_model_group</span><span class="p">,</span> <span class="n">end_effector_state</span><span class="p">,</span> <span class="n">timeout</span><span class="p">);</span>
+</pre></div>
+
+<p>IKの解を表示してみましょう．（もし，見つかればの話ですが）</p>
+<div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">found_ik</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">kinematic_state</span><span class="o">-&gt;</span><span class="n">copyJointGroupPositions</span><span class="p">(</span><span class="n">joint_model_group</span><span class="p">,</span> <span class="n">joint_values</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">joint_names</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">ROS_INFO</span><span class="p">(</span><span class="s">&quot;Joint %s: %f&quot;</span><span class="p">,</span> <span class="n">joint_names</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">joint_values</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">else</span>
+<span class="p">{</span>
+  <span class="n">ROS_INFO</span><span class="p">(</span><span class="s">&quot;Did not find IK solution&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<h3 id="_10">ヤコビアン</h3>
+<p>ヤコビアンとは，行列のことで，全ジョイントの角速度を入力すると手先リンクの速度を
+出力する特徴を持っています．
+これの逆行列を用いることで，所望の手先速度を得るためには，各ジョイントにどれくらいの
+角速度を与えればいいかを得ることができます．</p>
+<p>また，プログラムではヤコビアンを数値解析的に解いているので
+現在の関節の角度近傍のみで有効なヤコビアンが導出されます．
+つまり，関節角度が変わるたびにヤコビアンは計算し直す必要がります．</p>
+<p>ロボット工学では下記の名称を用いるのが慣例です．</p>
+<ul>
+<li>ヤコビ行列 : ヤコビアン</li>
+<li>ヤコビ行列式 : ヤコビ行列式</li>
+</ul>
+<p>数学では下記の名称を用いるのが慣例です．</p>
+<ul>
+<li>ヤコビ行列 : ヤコビ行列</li>
+<li>ヤコビ行列式 : ヤコビアン</li>
+</ul>
+<p><strong>ロボット工学とは名称が逆になっていることに注意してください．</strong>
+今回はロボット工学の慣例に従います．数学でヤコビアンはガウス積分などを計算するときに
+利用されます．</p>
+<div class="highlight"><pre><span></span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">reference_point_position</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
+<span class="n">Eigen</span><span class="o">::</span><span class="n">MatrixXd</span> <span class="n">jacobian</span><span class="p">;</span>
+<span class="n">kinematic_state</span><span class="o">-&gt;</span><span class="n">getJacobian</span><span class="p">(</span><span class="n">joint_model_group</span><span class="p">,</span>
+                             <span class="n">kinematic_state</span><span class="o">-&gt;</span><span class="n">getLinkModel</span><span class="p">(</span><span class="n">joint_model_group</span><span class="o">-&gt;</span><span class="n">getLinkModelNames</span><span class="p">().</span><span class="n">back</span><span class="p">()),</span>
+                             <span class="n">reference_point_position</span><span class="p">,</span> <span class="n">jacobian</span><span class="p">);</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Jacobian: </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">jacobian</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</pre></div>
+
+<h3 id="launch">Launchファイル</h3>
+<p>今回の例を実行するためには，あなたはlaunchファイルの中で下記の２つのことを行う必要があります．</p>
+<ul>
+<li>PandaアームのURDFとSRDFをパラメータサーバにアップロードする．</li>
+<li>MoveIt! Setup Assistantによって生成された<code>kinematic_solver</code>の設定をROSパラメータサーバにアップロードする．
+  ただし，このチュートリアルでインスタンス化したクラスのノードと同じネームスペースを利用すること．
+  具体的には下記のように<code>&lt;node ...</code>のなかに<code>&lt;rosparam ...</code>を書いて設定ファイルを読み込んでねということです．</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="nt">&lt;launch&gt;</span>
+  <span class="nt">&lt;include</span> <span class="na">file=</span><span class="s">&quot;$(find panda_moveit_config)/launch/planning_context.launch&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;arg</span> <span class="na">name=</span><span class="s">&quot;load_robot_description&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/include&gt;</span>
+
+  <span class="nt">&lt;node</span> <span class="na">name=</span><span class="s">&quot;robot_model_and_robot_state_tutorial&quot;</span>
+        <span class="na">pkg=</span><span class="s">&quot;moveit_tutorials&quot;</span>
+        <span class="na">type=</span><span class="s">&quot;robot_model_and_robot_state_tutorial&quot;</span>
+        <span class="na">respawn=</span><span class="s">&quot;false&quot;</span> <span class="na">output=</span><span class="s">&quot;screen&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;rosparam</span> <span class="na">command=</span><span class="s">&quot;load&quot;</span>
+              <span class="na">file=</span><span class="s">&quot;$(find panda_moveit_config)/config/kinematics.yaml&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/node&gt;</span>
+<span class="nt">&lt;/launch&gt;</span>
+</pre></div>
+
+<p>このlaunchファイルの中でなにをやっているかということを簡単に説明します．</p>
+<p>まずはじめの<code>&lt;include...</code>から始まるくくりの中では，<code>planning_contexe.launch</code>という
+launchファイルを探してきて，launchしてます．</p>
+<p>次の<code>&lt;node ...</code>から始まるくくりの中ではmoveit_tutorialsパッケージの中の
+robot_model_and_robot_state_tutorialというプログラムを実行しています．
+さらに，kinematic_solverの設定ファイルが<code>kinematics.yaml</code>というファイル中に書かれているので
+その設定をROSパラメータサーバにアップロードしてます．</p>
+<h2 id="robot-state">Robot Stateのデバッグ</h2>
+<p>Robot Stateのデバッグを支援するために，コマンドラインのツールを利用可能です．</p>
+<div class="highlight"><pre><span></span>rosrun moveit_ros_planning moveit_print_planning_model_info
+</pre></div>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../5/" class="btn btn-neutral float-right" title="プランニングシーン">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../3/" class="btn btn-neutral" title="Move Group C++ インターフェース"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../3/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../5/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+      <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

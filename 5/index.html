@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Harumo Sasatake">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>プランニングシーン - MoveIt! Japanese!</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link href="https://unpkg.com/mermaid@7.1.2/dist/mermaid.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "\u30d7\u30e9\u30f3\u30cb\u30f3\u30b0\u30b7\u30fc\u30f3";
+    var mkdocs_page_input_path = "5.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> MoveIt! Japanese!</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">MoveIt!のチュートリアル</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../1/">ここから始めよう!</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../2/">MoveIt!のクイックスタート．Rvizとともに</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../3/">Move Group C++ インターフェース</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../4/">Robot ModelとRobot State</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">プランニングシーン</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#_1">プランニングシーン</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#_2">ここから始めよう！</a></li>
+        
+            <li><a class="toctree-l3" href="#_3">全体のソースコード</a></li>
+        
+            <li><a class="toctree-l3" href="#_5">衝突検知</a></li>
+        
+            <li><a class="toctree-l3" href="#_10">制約条件のチェック</a></li>
+        
+            <li><a class="toctree-l3" href="#launch">Launchファイル</a></li>
+        
+            <li><a class="toctree-l3" href="#_12">コードの実行</a></li>
+        
+            <li><a class="toctree-l3" href="#_13">予想される結果</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../dot/">Dot</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../mermaid/">H</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">MoveIt! Japanese!</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>プランニングシーン</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="_1">プランニングシーン</h1>
+<p><a href="http://docs.ros.org/melodic/api/moveit_core/html/classplanning__scene_1_1PlanningScene.html">プランニングシーン</a>
+クラスは主に，<strong>衝突検知(collision checking)</strong>と<strong>制約検証(constraint checking)</strong>のための機能を提供します．
+このチュートリアルではC++インターフェースを用いて説明します．</p>
+<h2 id="_2">ここから始めよう！</h2>
+<p>昨晩はひど雨だった，本当にひどい雨で，何もかも流されてしまった．
+しかし，一つだけ残されたものがある．それが，<a href="../1/">ここから始めよう！</a>だ．
+すべて流されてしまったのだから，そこから始めるしかあるまい．</p>
+<h2 id="_3">全体のソースコード</h2>
+<p>全部のソースコードは<a href="https://github.com/ros-planning/moveit_tutorials/tree/master/doc/planning_scene">ここ</a>
+にある．</p>
+<h3 id="_4">セットアップ</h3>
+<p><a href="http://docs.ros.org/melodic/api/moveit_core/html/classplanning__scene_1_1PlanningScene.html">PlanningScene</a>
+クラスは<a href="http://docs.ros.org/melodic/api/moveit_core/html/classmoveit_1_1core_1_1RobotModel.html">RobotModel</a>
+クラスかURDFとSRDFを用いることで簡単に設定することが可能です．
+しかし，これらの方法で<code>PlanningScene</code>をインスタンス可するのはおすすめの方法ではありません．
+<a href="http://docs.ros.org/melodic/api/moveit_ros_planning/html/classplanning__scene__monitor_1_1PlanningSceneMonitor.html">PlanningSceneMonitor</a>
+クラスを使って<code>PlanningScene</code>クラスを生成し，ロボットのジョイントとロボットに搭載されている
+センサからのデータをもとに<code>PlanningScene</code>を維持することがおすすめです．
+(詳しくは次の章で議論します)
+この章では，我々は<code>PlannningScene</code>クラスを直接インスタンス化しますが
+これは説明を簡単にするためです．</p>
+<div class="highlight"><pre><span></span><span class="n">robot_model_loader</span><span class="o">::</span><span class="n">RobotModelLoader</span> <span class="n">robot_model_loader</span><span class="p">(</span><span class="s">&quot;robot_description&quot;</span><span class="p">);</span>
+<span class="n">robot_model</span><span class="o">::</span><span class="n">RobotModelPtr</span> <span class="n">kinematic_model</span> <span class="o">=</span> <span class="n">robot_model_loader</span><span class="p">.</span><span class="n">getModel</span><span class="p">();</span>
+<span class="n">planning_scene</span><span class="o">::</span><span class="n">PlanningScene</span> <span class="n">planning_scene</span><span class="p">(</span><span class="n">kinematic_model</span><span class="p">);</span>
+</pre></div>
+
+<h2 id="_5">衝突検知</h2>
+<h3 id="self-collision-checking">自己衝突検知(Self-collision checking)</h3>
+<p>最初に我々がチェックするのは現在のロボットの状態が自己衝突状態にあるかどうかということです．
+例えば，現在のロボット設定において各パーツ同士がお互いに接触していないかということを調べます．
+自己衝突検知を調べるために
+<a href="http://docs.ros.org/melodic/api/moveit_core/html/structcollision__detection_1_1CollisionRequest.html">CollisionRequest</a>
+オブジェクトと
+<a href="http://docs.ros.org/melodic/api/moveit_core/html/structcollision__detection_1_1CollisionResult.html">CollisionResult</a>
+オブジェクトを生成し，それを衝突検知関数に渡します．
+結果(CollisionResult)にはロボットが自己衝突しているかどうかが含まれることに注意してください．
+自己衝突検知にはロボットのパッドなし(<em>Unpadded</em>)バージョンを使用します．
+例えば，衝突検知はURDFによって提供される衝突検知用メッシュを直接的に使用し，
+このとき使用される衝突検知用メッシュには追加の余白(<em>Padding</em>)が含まれていません．</p>
+<div class="highlight"><pre><span></span><span class="n">collision_detection</span><span class="o">::</span><span class="n">CollisionRequest</span> <span class="n">collision_request</span><span class="p">;</span>
+<span class="n">collision_detection</span><span class="o">::</span><span class="n">CollisionResult</span> <span class="n">collision_result</span><span class="p">;</span>
+<span class="n">planning_scene</span><span class="p">.</span><span class="n">checkSelfCollision</span><span class="p">(</span><span class="n">collision_request</span><span class="p">,</span> <span class="n">collision_result</span><span class="p">);</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Test 1: Current state is &quot;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">collision_result</span><span class="p">.</span><span class="n">collision</span> <span class="o">?</span> <span class="s">&quot;in&quot;</span> <span class="o">:</span> <span class="s">&quot;not in&quot;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; self collision&quot;</span><span class="p">);</span>
+</pre></div>
+
+<h3 id="_6">状態の変更</h3>
+<p>さあ，ロボットの状態を変更してみましょう．<code>PlanningScene</code>クラスは現在の状態を内部に保持しています．
+我々はそれを参照し，それを変更し，そして，新しいロボットの設定に対して衝突検知が起こるかどうか
+をチェックすることができます．
+新しい衝突検知リクエストを作成する前に<code>collision_result</code>オブジェクトをクリアしておく
+必要があることに注意しましょう．</p>
+<div class="highlight"><pre><span></span><span class="n">robot_state</span><span class="o">::</span><span class="n">RobotState</span><span class="o">&amp;</span> <span class="n">current_state</span> <span class="o">=</span> <span class="n">planning_scene</span><span class="p">.</span><span class="n">getCurrentStateNonConst</span><span class="p">();</span>
+<span class="n">current_state</span><span class="p">.</span><span class="n">setToRandomPositions</span><span class="p">();</span>
+<span class="n">collision_result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="n">planning_scene</span><span class="p">.</span><span class="n">checkSelfCollision</span><span class="p">(</span><span class="n">collision_request</span><span class="p">,</span> <span class="n">collision_result</span><span class="p">);</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Test 2: Current state is &quot;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">collision_result</span><span class="p">.</span><span class="n">collision</span> <span class="o">?</span> <span class="s">&quot;in&quot;</span> <span class="o">:</span> <span class="s">&quot;not in&quot;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; self collision&quot;</span><span class="p">);</span>
+</pre></div>
+
+<h3 id="_7">グループに対するチェック</h3>
+<p>さあ，いよいよ，我々はPandaロボットのハンドの部分<strong>のみ</strong>に対して衝突検知を行います．
+つまり，ハンドとロボットのその他の部品が衝突しているかいないかをチェックするということです．
+我々はこれをグループネーム"hand"を<code>collision_request</code>に追加することで行うことができます．</p>
+<div class="highlight"><pre><span></span><span class="n">collision_request</span><span class="p">.</span><span class="n">group_name</span> <span class="o">=</span> <span class="s">&quot;hand&quot;</span><span class="p">;</span>
+<span class="n">current_state</span><span class="p">.</span><span class="n">setToRandomPositions</span><span class="p">();</span>
+<span class="n">collision_result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="n">planning_scene</span><span class="p">.</span><span class="n">checkSelfCollision</span><span class="p">(</span><span class="n">collision_request</span><span class="p">,</span> <span class="n">collision_result</span><span class="p">);</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Test 3: Current state is &quot;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">collision_result</span><span class="p">.</span><span class="n">collision</span> <span class="o">?</span> <span class="s">&quot;in&quot;</span> <span class="o">:</span> <span class="s">&quot;not in&quot;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; self collision&quot;</span><span class="p">);</span>
+</pre></div>
+
+<h3 id="_8">衝突情報の取得</h3>
+<p>まずはじめに，自己衝突することがわかっている姿勢にPandaアームを移動させましょう．
+実際，この状態はPandaアームのジョイントリミットの外側であり，直接的にチェックできることに
+注意してください．</p>
+<div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">joint_values</span> <span class="o">=</span> <span class="p">{</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.9</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">,</span> <span class="mf">0.0</span> <span class="p">};</span>
+<span class="k">const</span> <span class="n">robot_model</span><span class="o">::</span><span class="n">JointModelGroup</span><span class="o">*</span> <span class="n">joint_model_group</span> <span class="o">=</span> <span class="n">current_state</span><span class="p">.</span><span class="n">getJointModelGroup</span><span class="p">(</span><span class="s">&quot;panda_arm&quot;</span><span class="p">);</span>
+<span class="n">current_state</span><span class="p">.</span><span class="n">setJointGroupPositions</span><span class="p">(</span><span class="n">joint_model_group</span><span class="p">,</span> <span class="n">joint_values</span><span class="p">);</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Test 4: Current state is &quot;</span>
+                <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">current_state</span><span class="p">.</span><span class="n">satisfiesBounds</span><span class="p">(</span><span class="n">joint_model_group</span><span class="p">)</span> <span class="o">?</span> <span class="s">&quot;valid&quot;</span> <span class="o">:</span> <span class="s">&quot;not valid&quot;</span><span class="p">));</span>
+</pre></div>
+
+<p>さあ，我々は先程設定した衝突しているであろうPandaアームから衝突に関する情報を取得することが
+できます．我々は衝突情報(contact information)を衝突リクエスト(collision requiest)に
+適切な情報を入力することによって得ることができます．衝突リクエストには返ってくる
+最大の衝突数を指定します．この衝突数は大きな数を指定するのが良いでしょう．</p>
+<div class="highlight"><pre><span></span><span class="n">collision_request</span><span class="p">.</span><span class="n">contacts</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+<span class="n">collision_request</span><span class="p">.</span><span class="n">max_contacts</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+</pre></div>
+
+<div class="highlight"><pre><span></span><span class="n">collision_result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="n">planning_scene</span><span class="p">.</span><span class="n">checkSelfCollision</span><span class="p">(</span><span class="n">collision_request</span><span class="p">,</span> <span class="n">collision_result</span><span class="p">);</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Test 5: Current state is &quot;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">collision_result</span><span class="p">.</span><span class="n">collision</span> <span class="o">?</span> <span class="s">&quot;in&quot;</span> <span class="o">:</span> <span class="s">&quot;not in&quot;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; self collision&quot;</span><span class="p">);</span>
+<span class="n">collision_detection</span><span class="o">::</span><span class="n">CollisionResult</span><span class="o">::</span><span class="n">ContactMap</span><span class="o">::</span><span class="n">const_iterator</span> <span class="n">it</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">it</span> <span class="o">=</span> <span class="n">collision_result</span><span class="p">.</span><span class="n">contacts</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">it</span> <span class="o">!=</span> <span class="n">collision_result</span><span class="p">.</span><span class="n">contacts</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">ROS_INFO</span><span class="p">(</span><span class="s">&quot;Contact between: %s and %s&quot;</span><span class="p">,</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">.</span><span class="n">second</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="p">}</span>
+</pre></div>
+
+<h3 id="allowed-collision-matrix">Allowed Collision Matrixの更新</h3>
+<p><a href="http://docs.ros.org/melodic/api/moveit_core/html/classcollision__detection_1_1AllowedCollisionMatrix.html">Allowd Collision Matrix (ACM)</a>
+クラスは，ある物体間（例えば，ロボットのパーツと空間内のオブジェクト）で
+起こるかもしれない衝突を無視することを伝えるメカニズムを提供します．
+我々は衝突検知を判定する関数に上述したリンク間のすべての衝突を無視することを伝えることが
+できます．具体的には，たとえ，実際はそのリンクが衝突していたとしても，
+衝突検知関数はその衝突を無視し，ロボットがこの特定の状態に対して，衝突していないことを
+返します．</p>
+<p>このサンプルでは，我々がどのようにAllowed Collision Matrixと現在の状態をコピーし
+そして，それを鑑賞検知関数にどのように渡すかということに注意して見てください．</p>
+<div class="highlight"><pre><span></span><span class="n">collision_detection</span><span class="o">::</span><span class="n">AllowedCollisionMatrix</span> <span class="n">acm</span> <span class="o">=</span> <span class="n">planning_scene</span><span class="p">.</span><span class="n">getAllowedCollisionMatrix</span><span class="p">();</span>
+<span class="n">robot_state</span><span class="o">::</span><span class="n">RobotState</span> <span class="n">copied_state</span> <span class="o">=</span> <span class="n">planning_scene</span><span class="p">.</span><span class="n">getCurrentState</span><span class="p">();</span>
+
+<span class="n">collision_detection</span><span class="o">::</span><span class="n">CollisionResult</span><span class="o">::</span><span class="n">ContactMap</span><span class="o">::</span><span class="n">const_iterator</span> <span class="n">it2</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">it2</span> <span class="o">=</span> <span class="n">collision_result</span><span class="p">.</span><span class="n">contacts</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">it2</span> <span class="o">!=</span> <span class="n">collision_result</span><span class="p">.</span><span class="n">contacts</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it2</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">acm</span><span class="p">.</span><span class="n">setEntry</span><span class="p">(</span><span class="n">it2</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">.</span><span class="n">first</span><span class="p">,</span> <span class="n">it2</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">.</span><span class="n">second</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">collision_result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="n">planning_scene</span><span class="p">.</span><span class="n">checkSelfCollision</span><span class="p">(</span><span class="n">collision_request</span><span class="p">,</span> <span class="n">collision_result</span><span class="p">,</span> <span class="n">copied_state</span><span class="p">,</span> <span class="n">acm</span><span class="p">);</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Test 6: Current state is &quot;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">collision_result</span><span class="p">.</span><span class="n">collision</span> <span class="o">?</span> <span class="s">&quot;in&quot;</span> <span class="o">:</span> <span class="s">&quot;not in&quot;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; self collision&quot;</span><span class="p">);</span>
+</pre></div>
+
+<h3 id="_9">完全な衝突検知</h3>
+<p>今まで，我々は<code>checkCollision</code>関数を自己衝突に関してのみ使用してきましたが，
+この関数は自己衝突のみならず，環境中の物体に対しての衝突検知に対しても使用できます
+（現在は空ですが）．
+これは軌道計画プランナで最も頻繁に使用される衝突検知関数のセットです．
+環境中の物体に対しての衝突検知では余白（padded）が入ったバージョンのロボットモデルが使用されることに注意
+してください．余白はロボットを環境中の障害物からより遠ざけたままにしておくことに役立ちます．</p>
+<div class="highlight"><pre><span></span><span class="n">collision_result</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="n">planning_scene</span><span class="p">.</span><span class="n">checkCollision</span><span class="p">(</span><span class="n">collision_request</span><span class="p">,</span> <span class="n">collision_result</span><span class="p">,</span> <span class="n">copied_state</span><span class="p">,</span> <span class="n">acm</span><span class="p">);</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Test 7: Current state is &quot;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">collision_result</span><span class="p">.</span><span class="n">collision</span> <span class="o">?</span> <span class="s">&quot;in&quot;</span> <span class="o">:</span> <span class="s">&quot;not in&quot;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; self collision&quot;</span><span class="p">);</span>
+</pre></div>
+
+<h2 id="_10">制約条件のチェック</h2>
+<p><code>PlanningScene</code>クラスは簡単に使える制約条件のチェックを行う関数を持っています．
+制約条件は２タイプに別れます．
+: (a) 
+<a href="http://docs.ros.org/melodic/api/moveit_core/html/classkinematic__constraints_1_1KinematicConstraint.html">KinematicConstraint</a>
+セットから選択される制約条件．例えば
+<a href="http://docs.ros.org/melodic/api/moveit_core/html/classkinematic__constraints_1_1JointConstraint.html">JointConstraint</a>,
+<a href="http://docs.ros.org/melodic/api/moveit_core/html/classkinematic__constraints_1_1PositionConstraint.html">PositionConstraint</a>,
+<a href="http://docs.ros.org/melodic/api/moveit_core/html/classkinematic__constraints_1_1OrientationConstraint.html">OrientationConstraint</a>,
+そして，
+<a href="http://docs.ros.org/melodic/api/moveit_core/html/classkinematic__constraints_1_1VisibilityConstraint.html">VisibilityConstraint</a>
+です．
+(b)ユーザーがコールバック関数を通して定義する制約条件です．
+まずはじめに，簡単なKinematicConstraintの例から見ていきましょう．</p>
+<h3 id="kinematic-constraint">運動学上の制約(kinematic constraint)をチェックする</h3>
+<p>我々はまずはじめにPandaロボットのpanda_armグループに属するエンドエフェクタの
+簡単な位置と姿勢の制約を定義します．便利な関数を使用して制約条件を設定することに
+着目してください（これらの関数はmoveit_coreのkinematic_constraintsディレクトリの中にある
+<a href="http://docs.ros.org/melodic/api/moveit_core/html/utils_8h.html">utils.h</a>にあります）</p>
+<div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">end_effector_name</span> <span class="o">=</span> <span class="n">joint_model_group</span><span class="o">-&gt;</span><span class="n">getLinkModelNames</span><span class="p">().</span><span class="n">back</span><span class="p">();</span>
+
+<span class="n">geometry_msgs</span><span class="o">::</span><span class="n">PoseStamped</span> <span class="n">desired_pose</span><span class="p">;</span>
+<span class="n">desired_pose</span><span class="p">.</span><span class="n">pose</span><span class="p">.</span><span class="n">orientation</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+<span class="n">desired_pose</span><span class="p">.</span><span class="n">pose</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">;</span>
+<span class="n">desired_pose</span><span class="p">.</span><span class="n">pose</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.185</span><span class="p">;</span>
+<span class="n">desired_pose</span><span class="p">.</span><span class="n">pose</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">;</span>
+<span class="n">desired_pose</span><span class="p">.</span><span class="n">header</span><span class="p">.</span><span class="n">frame_id</span> <span class="o">=</span> <span class="s">&quot;panda_link0&quot;</span><span class="p">;</span>
+<span class="n">moveit_msgs</span><span class="o">::</span><span class="n">Constraints</span> <span class="n">goal_constraint</span> <span class="o">=</span>
+    <span class="n">kinematic_constraints</span><span class="o">::</span><span class="n">constructGoalConstraints</span><span class="p">(</span><span class="n">end_effector_name</span><span class="p">,</span> <span class="n">desired_pose</span><span class="p">);</span>
+</pre></div>
+
+<p>PlanningScneクラスにある<code>isStateConstrained</code>関数を用いて，
+この制約条件に関する状態をチェックします．</p>
+<div class="highlight"><pre><span></span><span class="n">copied_state</span><span class="p">.</span><span class="n">setToRandomPositions</span><span class="p">();</span>
+<span class="n">copied_state</span><span class="p">.</span><span class="n">update</span><span class="p">();</span>
+<span class="kt">bool</span> <span class="n">constrained</span> <span class="o">=</span> <span class="n">planning_scene</span><span class="p">.</span><span class="n">isStateConstrained</span><span class="p">(</span><span class="n">copied_state</span><span class="p">,</span> <span class="n">goal_constraint</span><span class="p">);</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Test 8: Random state is &quot;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">constrained</span> <span class="o">?</span> <span class="s">&quot;constrained&quot;</span> <span class="o">:</span> <span class="s">&quot;not constrained&quot;</span><span class="p">));</span>
+</pre></div>
+
+<p>制約条件のチェックにはもっと効率の良い方法があります（あなたが，何度も同じ制約条件に
+対してチェックを行うときの話ですが．例えば，軌道生成プランナーの中でとか）
+我々は最初に<code>KinematicConstraintSet</code>クラスを生成します．このクラスはROS Constraintsメッセージの
+プリプロセス（下準備）と素早く処理するための準備を行うクラスです．</p>
+<div class="highlight"><pre><span></span><span class="n">kinematic_constraints</span><span class="o">::</span><span class="n">KinematicConstraintSet</span> <span class="n">kinematic_constraint_set</span><span class="p">(</span><span class="n">kinematic_model</span><span class="p">);</span>
+<span class="n">kinematic_constraint_set</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">goal_constraint</span><span class="p">,</span> <span class="n">planning_scene</span><span class="p">.</span><span class="n">getTransforms</span><span class="p">());</span>
+<span class="kt">bool</span> <span class="n">constrained_2</span> <span class="o">=</span> <span class="n">planning_scene</span><span class="p">.</span><span class="n">isStateConstrained</span><span class="p">(</span><span class="n">copied_state</span><span class="p">,</span> <span class="n">kinematic_constraint_set</span><span class="p">);</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Test 9: Random state is &quot;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">constrained_2</span> <span class="o">?</span> <span class="s">&quot;constrained&quot;</span> <span class="o">:</span> <span class="s">&quot;not constrained&quot;</span><span class="p">));</span>
+</pre></div>
+
+<p>KinematicConstraintSetクラスを用いて，これを直接的に行う方法があります．</p>
+<div class="highlight"><pre><span></span><span class="n">kinematic_constraints</span><span class="o">::</span><span class="n">ConstraintEvaluationResult</span> <span class="n">constraint_eval_result</span> <span class="o">=</span>
+    <span class="n">kinematic_constraint_set</span><span class="p">.</span><span class="n">decide</span><span class="p">(</span><span class="n">copied_state</span><span class="p">);</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Test 10: Random state is &quot;</span>
+                <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">constraint_eval_result</span><span class="p">.</span><span class="n">satisfied</span> <span class="o">?</span> <span class="s">&quot;constrained&quot;</span> <span class="o">:</span> <span class="s">&quot;not constrained&quot;</span><span class="p">));</span>
+</pre></div>
+
+<h3 id="_11">ユーザー定義の制約条件</h3>
+<p>ユーザー定義の制約条件をPlannningSceneクラスに登録することができます．
+これは<code>setStateFeasibilityPredicate</code>関数を用いてコールバック関数を登録することによって
+行います．このチュートリアルでは，簡単にするため，Pandaアームの"panda_joint1"が正の角度
+にあるか，負の角度にあるかをチェックするユーザー定義のコールバック関数を例として用います．</p>
+<div class="highlight"><pre><span></span><span class="kt">bool</span> <span class="nf">stateFeasibilityTestExample</span><span class="p">(</span><span class="k">const</span> <span class="n">robot_state</span><span class="o">::</span><span class="n">RobotState</span><span class="o">&amp;</span> <span class="n">kinematic_state</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">verbose</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">joint_values</span> <span class="o">=</span> <span class="n">kinematic_state</span><span class="p">.</span><span class="n">getJointPositions</span><span class="p">(</span><span class="s">&quot;panda_joint1&quot;</span><span class="p">);</span>
+  <span class="k">return</span> <span class="p">(</span><span class="n">joint_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Feasibilityを実現可能性と訳してます．</p>
+</div>
+<p>さあ，これで，<code>isStateFeasible</code>関数が呼び出されるときはいつもユーザー定義のコールバック関数
+も呼び出されることでしょう．</p>
+<div class="highlight"><pre><span></span><span class="n">planning_scene</span><span class="p">.</span><span class="n">setStateFeasibilityPredicate</span><span class="p">(</span><span class="n">stateFeasibilityTestExample</span><span class="p">);</span>
+<span class="kt">bool</span> <span class="n">state_feasible</span> <span class="o">=</span> <span class="n">planning_scene</span><span class="p">.</span><span class="n">isStateFeasible</span><span class="p">(</span><span class="n">copied_state</span><span class="p">);</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Test 11: Random state is &quot;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">state_feasible</span> <span class="o">?</span> <span class="s">&quot;feasible&quot;</span> <span class="o">:</span> <span class="s">&quot;not feasible&quot;</span><span class="p">));</span>
+</pre></div>
+
+<p><code>isStateValid</code>が呼び出されるときはいつも，３つのチェックが実行されます．</p>
+<ul>
+<li>(a) 衝突検知</li>
+<li>(b) 制約条件チェック</li>
+<li>(c) ユーザー定義のコールバック関数を用いた実現可能性チェック</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kt">bool</span> <span class="n">state_valid</span> <span class="o">=</span> <span class="n">planning_scene</span><span class="p">.</span><span class="n">isStateValid</span><span class="p">(</span><span class="n">copied_state</span><span class="p">,</span> <span class="n">kinematic_constraint_set</span><span class="p">,</span> <span class="s">&quot;panda_arm&quot;</span><span class="p">);</span>
+<span class="n">ROS_INFO_STREAM</span><span class="p">(</span><span class="s">&quot;Test 12: Random state is &quot;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">state_valid</span> <span class="o">?</span> <span class="s">&quot;valid&quot;</span> <span class="o">:</span> <span class="s">&quot;not valid&quot;</span><span class="p">));</span>
+</pre></div>
+
+<p>MoveIt!とOMPLを通して利用できるすべてのプランナーは衝突検知，制約条件チェック，ユーザー定義の
+コールバック関数を用いた実現可能性チェックを実行することを気に留めておいてください．</p>
+<h2 id="launch">Launchファイル</h2>
+<p>launchファイル全体は<a href="https://github.com/ros-planning/moveit_tutorials/blob/melodic-devel/doc/planning_scene/launch/planning_scene_tutorial.launch">ここ</a>
+にあります．すべてのチュートリアルのソースコードはmoveit_tutorialパッケージに含まれており
+コンパイルして実行することができます．</p>
+<h2 id="_12">コードの実行</h2>
+<p>moveit_tutorialパッケージから下記のようにlaunchファイルをroslaunchすることができます．</p>
+<div class="highlight"><pre><span></span>roslaunch moveit_tutorials planning_scene_tutorial.launch
+</pre></div>
+
+<h2 id="_13">予想される結果</h2>
+<p>実行結果は下記のようになることが予想されますが，関節角度にランダムな値を設定しているので
+数値は異なるでしょう．</p>
+<div class="highlight"><pre><span></span>ros.moveit_tutorials: Test <span class="m">1</span>: Current state is not in self collision
+ros.moveit_tutorials: Test <span class="m">2</span>: Current state is not in self collision
+ros.moveit_tutorials: Test <span class="m">3</span>: Current state is not in self collision
+ros.moveit_tutorials: Test <span class="m">4</span>: Current state is valid
+ros.moveit_tutorials: Test <span class="m">5</span>: Current state is in self collision
+ros.moveit_tutorials: Contact between: panda_leftfinger and panda_link1
+ros.moveit_tutorials: Contact between: panda_link1 and panda_rightfinger
+ros.moveit_tutorials: Test <span class="m">6</span>: Current state is not in self collision
+ros.moveit_tutorials: Test <span class="m">7</span>: Current state is not in self collision
+ros.moveit_tutorials: Test <span class="m">8</span>: Random state is not constrained
+ros.moveit_tutorials: Test <span class="m">9</span>: Random state is not constrained
+ros.moveit_tutorials: Test <span class="m">10</span>: Random state is not constrained
+ros.moveit_tutorials: Test <span class="m">11</span>: Random state is feasible
+ros.moveit_tutorials: Test <span class="m">12</span>: Random state is not valid
+</pre></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>コンソールへの出力フォーマットが異なっても気にしないでください．
+<a href="http://dav.ee/blog/notes/archives/898">このブログ</a>
+を参照することによって出力フォーマットをカスタマイズすることができます．</p>
+</div>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../dot/" class="btn btn-neutral float-right" title="Dot">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../4/" class="btn btn-neutral" title="Robot ModelとRobot State"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../4/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../dot/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+      <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>
