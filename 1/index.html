@@ -14,7 +14,6 @@
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
-  <link href="https://unpkg.com/mermaid@7.1.2/dist/mermaid.css" rel="stylesheet">
   
   <script>
     // Current page data
@@ -101,12 +100,17 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../dot/">Dot</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../mermaid/">H</a>
+    <span class="caption-text">Joint trajectory controller</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../joint_trajectory_controller/joint_trajectory_controller/">joint_trajectory_controller</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../joint_trajectory_controller/understanding_trajectory_replacement/">Understanding Trajectory Replacement</a>
+                </li>
+    </ul>
 	    </li>
           
         </ul>
@@ -151,25 +155,25 @@
 注意深く進めましょう．もし，あなたが次から行ういくつかのステップにおいてエラーが出てしまったら
 この章に立ち返って，正しくROSをインストールすることをオススメします．</p>
 <p>ROSがインストールできたら，パッケージのアップデートを忘れずにしましょう．</p>
-<div class="highlight"><pre><span></span>rosdep
+<pre><code class="sh">rosdep
 sudo apt update
 sudo apt upgrade
 sudo apt dist-upgrade
-</pre></div>
+</code></pre>
 
 <p>ROSのビルドシステムである<a href="wiki.ros.org/catkin">catkin</a>をインストールしましょう．</p>
-<div class="highlight"><pre><span></span>sudo apt install ros-melodic-catkin python-catkin-tools
-</pre></div>
+<pre><code>sudo apt install ros-melodic-catkin python-catkin-tools
+</code></pre>
 
 <h2 id="moveit">MoveIt!のインストール</h2>
 <p>最も簡単なMoveIt!のインストール方法は事前にビルドしてあるものを使用することです．</p>
-<div class="highlight"><pre><span></span>sudo apt install ros-melodic-moveit
-</pre></div>
+<pre><code>sudo apt install ros-melodic-moveit
+</code></pre>
 
 <h2 id="catkin">練習用のcatkinパッケージを作ろう</h2>
 <p>catkinワークスペースのセットアップが必要なのでしましょう．</p>
-<div class="highlight"><pre><span></span>mkdir -p ~/catkin_ws/src
-</pre></div>
+<pre><code>mkdir -p ~/catkin_ws/src
+</code></pre>
 
 <h2 id="_2">サンプルコードのダウンロード</h2>
 <p>チュートリアルに沿って勉強するために，<strong>ROBOT_moveit_config</strong>パッケージを作成しましょう．
@@ -178,10 +182,10 @@ sudo apt dist-upgrade
 見ることによって理解が深まりますよ．</p>
 <p>あなたのcatkin_wsの中に，チュートリアルだけでなく<code>panda_moveit_config</code>パッケージも
 ダウンロードしてください．</p>
-<div class="highlight"><pre><span></span>cd ~/catkin_ws/src
+<pre><code>cd ~/catkin_ws/src
 git clone https://github.com/ros-planning/moveit_tutorials.git -b master
 git clone https://github.com/ros-planning/panda_moveit_config.git -b melodic-devel
-</pre></div>
+</code></pre>
 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -190,15 +194,15 @@ git clone https://github.com/ros-planning/panda_moveit_config.git -b melodic-dev
 </div>
 <h2 id="catkin-workspace">catkin workspaceをビルドする</h2>
 <p>下記のコマンドで足りていないパッケージを自動的にインストールします．</p>
-<div class="highlight"><pre><span></span>cd ~/catkin_ws/src
+<pre><code>cd ~/catkin_ws/src
 rosdep install -y --from-paths . --ignore-src --rosdistro melodic
-</pre></div>
+</code></pre>
 
 <p>次のコマンドはcatkin workspaceの設定をします．</p>
-<div class="highlight"><pre><span></span>cd ~/catkin_ws/src
+<pre><code>cd ~/catkin_ws/src
 catkin config --extend /opt/ros/${ROS_DISTRO} --cmake-args -DCMAKE_BUILD_TYPE=Release
 catkin build
-</pre></div>
+</code></pre>
 
 <p><code>catkin build</code>で作成された設定を反映します．
 具体的には下記のコマンドを打つことで,
@@ -206,8 +210,8 @@ catkin build
 <p>やってもいいし，やらなくてもいいですが
 上述のコマンドを<code>.bashrc</code>ファイルに書き込んでおくと，上述のコマンドをビルドのたびに
 打ち直す必要がなくて便利です．ファイルへの書き込みは下記のコマンドでできます．</p>
-<div class="highlight"><pre><span></span>echo &#39;source ~/catkin_ws/devel/setup.bash&#39; &gt;&gt; ~/.bashrc
-</pre></div>
+<pre><code>echo 'source ~/catkin_ws/devel/setup.bash' &gt;&gt; ~/.bashrc
+</code></pre>
 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -262,7 +266,6 @@ catkin build
     <script src="../js/theme.js" defer></script>
       <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-      <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js" defer></script>
       <script src="../search/main.js" defer></script>
 
 </body>

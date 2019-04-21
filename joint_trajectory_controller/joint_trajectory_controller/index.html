@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Harumo Sasatake">
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>joint_trajectory_controller - MoveIt! Japanese!</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "joint_trajectory_controller";
+    var mkdocs_page_input_path = "joint_trajectory_controller/joint_trajectory_controller.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> MoveIt! Japanese!</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">MoveIt!のチュートリアル</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../1/">ここから始めよう!</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../2/">MoveIt!のクイックスタート．Rvizとともに</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../3/">Move Group C++ インターフェース</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../4/">Robot ModelとRobot State</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../5/">プランニングシーン</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Joint trajectory controller</span>
+    <ul class="subnav">
+                <li class=" current">
+                    
+    <a class="current" href="./">joint_trajectory_controller</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#joint_trajectory_controller">joint_trajectory_controller</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#_1">概要</a></li>
+        
+            <li><a class="toctree-l4" href="#_5">軌道を送る</a></li>
+        
+            <li><a class="toctree-l4" href="#ros-api">ROS API</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../understanding_trajectory_replacement/">Understanding Trajectory Replacement</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">MoveIt! Japanese!</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Joint trajectory controller &raquo;</li>
+        
+      
+    
+    <li>joint_trajectory_controller</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="joint_trajectory_controller">joint_trajectory_controller</h1>
+<div class="admonition quote">
+<p class="admonition-title">Quote</p>
+<ul>
+<li><a href="http://wiki.ros.org/joint_trajectory_controller">joint_trajectory_controller</a></li>
+<li><a href="http://docs.ros.org/api/trajectory_msgs/html/msg/JointTrajectory.html">UnderstandingTrajectoryReplacement</a></li>
+<li><a href="http://docs.ros.org/api/trajectory_msgs/html/msg/JointTrajectory.html">trajectory_msgs/JointTrajectoryMessage</a></li>
+</ul>
+</div>
+<h2 id="_1">概要</h2>
+<p>ジョイントグループのジョイント空間での軌道(trajectory)を実行するコントローラである．
+軌道は，到達時刻が指定された経由点(waypoint)の集合によって指定されます．そして，
+コントローラは，その機構が許す限りそれらの軌道を実行するように試みます．
+経由点は位置(角度)，速度，加速度によって構成されます．この内，速度と加速度は指定しなくても
+良いです．</p>
+<h3 id="_2">軌道の置き換え</h3>
+<p>コントローラは複数の軌道補間で動作するように設定されています．デフォルトでは
+スプライン補間が適用されます．しかし，他の軌道補間も利用可能です．
+適用されるスプライン補間は，下記のように経由点の指定方法によって異なります．</p>
+<dl>
+<dt><a href="https://ja.wikipedia.org/wiki/%E5%8C%BA%E5%88%86%E7%B7%9A%E5%BD%A2%E9%96%A2%E6%95%B0#/media/File:Finite_element_method_1D_illustration1.png">１次スプライン補間</a></dt>
+<dd>もし，ジョイントの位置だけが指定された場合，この補間が指定されます．この場合，位置レベルでの連続は保証されます．
+しかし，推奨しません．なぜなら，速度の観点から見ると経由点は連続ではないからです．ここで言う連続は微分可能であるということと同義です．</dd>
+<dt><a href="https://help.xlstat.com/customer/ja/portal/articles/2062403-xlstat%E3%81%AB%E3%82%88%E3%82%8B3%E6%AC%A1%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%B3%E3%81%AE%E9%81%A9%E5%90%88">３次スプライン補間</a></dt>
+<dd>ジョイントの位置と速度が指定された場合は，この補間が適用されます．速度レベルでの連続性は保証されます．</dd>
+<dt>５次スプライン補間</dt>
+<dd>ジョイントの位置，速度，加速度が指定された場合に適用されます．加速度レベルでの連続性が保証されます．</dd>
+</dl>
+<h3 id="_3">ハードウェアのインターフェース</h3>
+<p>このコントローラは複数のインターフェースで動作するように設定されています．
+現在利用可能なジョイントのタイプは<strong>position</strong>, <strong>velocity</strong>,そして<strong>effort</strong>です．
+positionジョイントを有している場合，コントローラは指定された所望のジョイント位置をそのまま伝達します．
+velocity(effort)ジョイントの場合は，PIDループによって位置＋速度の追従誤差が反映されたコマンドが
+伝達されます．
+コントローラの設定は<a href="http://wiki.ros.org/joint_trajectory_controller#Controller_configuration_examples">ここ</a>で
+見ることができます．</p>
+<p>上記の軌道補間の場合と同様に，新しいハードウェアのインターフェースに対しても
+サポートすることも可能ですし，また，既存のサポートしているposition,
+velocity,effortインターフェースをマッピングすることもできます(例えば，effortコマンドを生成するた油圧コントローラ）．</p>
+<h3 id="_4">その他の特徴</h3>
+<ul>
+<li>リアルタイムセーフな実装</li>
+<li>ラッピング(conitinuous)なジョイントに対する適切な取扱</li>
+<li>システムのクロックの変更にロバスト 
+    連続的に増加していかないクロックを有するシステム下においても
+    キューに入れられている軌道の実行は，不連続にならない．(入れられた順に実行される)</li>
+</ul>
+<h2 id="_5">軌道を送る</h2>
+<h3 id="_6">利用可能なインターフェース</h3>
+<p>コントロラーにコマンドを送るためにはに種類のインターフェースを利用することが可能です．
+<strong>action interface</strong>と<strong>topic interface</strong>です．両方共
+<a href="http://docs.ros.org/api/trajectory_msgs/html/msg/JointTrajectory.html">trajectory_msgs/JointTrajectory</a>
+メッセージを軌道を指定するために行います．そして，<code>allow_partial_joints_goal</code>がTrueでない場合には，
+メッセージには<em>すべて(サブセットだけでなくすべての)</em>のジョイントのコントローラの名前
+(controller.yamlで指定して，パラメータサーバに登録されている)を書き込む必要があります．</p>
+<p>軌道を送る第１の方法は<strong>action interface</strong>を使うことです．そして，実行の途中経過を観測したい
+場合はこちらを選択することが望ましいでしょう．Action goalsは実行される軌道を指定するだけでなく
+経路やゴールとの誤差（tolerance)も指定することができます．
+ゴールとの誤差が指定されていない場合には，この値はパラメータサーバに登録されている
+ものを使用します（詳しくは
+<a href="http://wiki.ros.org/joint_trajectory_controller#ROS_API">ROS API</a>
+を見てください）．
+もし，軌道の実行中にゴールとの誤差を満たせなかった場合はactionは中止され，
+クライアントにもそのことが通知されます．</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>ゴールへの軌道が中止されたときでも，コントローラはできる限り軌道を実行しようと試みるでしょう．</p>
+</div>
+<p><strong>topic interface</strong>は<em>実行と忘却(fire-and-forget)</em>を行う方法です．</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>fire-and-forgetとはミサイルの発射・誘導方式に関する軍事用語で，発車後にミサイル自体が
+標的を追尾する能力を持つため発射母体g誘導のために照準を持続させたり，他の手段による標的に
+誘導照準を行ったりする必要がないものを言う．</p>
+</div>
+<p>軌道の実行を監視する必要のないときにはこちらを使ってください．topic interfaceを使用する場合は
+コントローラの経路やゴールとの誤差をしているすることはできません．なぜなら，
+送信したノードに対してゴールとの誤差が大きいことを教える標準的な方法が無いからです．
+標準的な方法が準備されてないだけで，観測の方法はいくつかあります．
+例えば，query_stateサービスとstateトピック(詳しくは
+<a href="http://wiki.ros.org/joint_trajectory_controller#ROS_API">下記のROS APIの章</a>
+を参照してください）を通して軌道の実行を観測することができます．
+これは，ちょっと面倒な(しかし柔軟な)action interfaceの実現方法です．</p>
+<h3 id="preemption">中断(Preemption)戦略</h3>
+<p>ただ１つのアクションのみが有効なとき，もしくはtopic interfaceが使用されていないときには
+，経路とゴールまでの誤差は，現在有効なその軌道に対してのみチェックされます．</p>
+<p>現在有効な軌道が他のactionやtopicインターフェースからのコマンドによって横取りされたとき
+現在のゴールはキャンセルされ，クライアントにもそれが通知されます．</p>
+<p>topic interfaceから<strong>空の軌道</strong>を送ると，<em>すべて</em>の実行が予定されている軌道をキャンセルし
+現在位置を保持するモードに入ります．
+<code>stop_trajectory_duration</code>パラメータはこのストップモーションの実行にどのくらいの時間を
+許すかを設定します．</p>
+<h3 id="_7">軌道の置き換え</h3>
+<p>ジョイント軌道メッセージはいつ新しい軌道の実行を開始するかという時刻の設定ができます．
+この機能はヘッダーのタイムスタンプによって実現します．ここに０（デフォルト）を入れることは
+<em>すぐに実行すること</em>を意味します．</p>
+<p>新しい軌道のコマンドの到着は必ずしもコントローラが感染に現在実行中の軌道を捨てさり，
+代わりに新しい軌道を実行することを意味しません．
+むしろ，コントローラは両方の軌道の便利な部分を取り，それらを適切に組み合わせます．
+この振る舞いに関しての詳細は
+<a href="http://wiki.ros.org/joint_trajectory_controller/UnderstandingTrajectoryReplacement">understanding trajectory replacement</a>
+を参照してください．</p>
+<h2 id="ros-api">ROS API</h2>
+<h3 id="_8">説明</h3>
+<h4 id="311-action-interface">3.1.1 action interface</h4>
+<p>コントローラは
+<a href="http://docs.ros.org/api/control_msgs/html/action/FollowJointTrajectory.html">control_msgs::FollowJointTrajectoryAction</a>
+インターフェースをコントローラの<code>follow_joint_trajectory</code>ネームスペース内に持っています．
+何を送ればいいかについての情報に関してはactionの定義を見てください．</p>
+<h4 id="312-subscribed-topics">3.1.2 subscribed topics</h4>
+<dl>
+<dt>command(<a href="http://docs.ros.org/api/trajectory_msgs/html/msg/JointTrajectory.html">torajectory_msgs/JointTrajectory</a>)</dt>
+<dd>torajectory interfaceを利用して実行する軌道</dd>
+</dl>
+<h4 id="313-published-topics">3.1.3 published topics</h4>
+<dl>
+<dt>state(<a href="http://docs.ros.org/api/control_msgs/html/msg/JointTrajectoryControllerState.html">control_msgs/JointTrajectoryControllerState</a></dt>
+<dd>現在のコントローラの状態</dd>
+</dl>
+<h4 id="314-services">3.1.4 services</h4>
+<dl>
+<dt>query_state(<a href="http://docs.ros.org/api/control_msgs/html/srv/QueryTrajectoryState.html">control_msgs/QueryTrajectoryState</a></dt>
+<dd>コントローラの今後の予定の問い合わせ</dd>
+</dl>
+<h4 id="315-parameters">3.1.5 parameters</h4>
+<ul>
+<li>
+<p>joints(string[])</p>
+<p>コントロールしている関節のリスト</p>
+</li>
+<li>
+<p>constraints/goal_time(double, default: 0.0) </p>
+<p>もし，ゴール軌道上の点のタイムスタンプがtであり，t+/-<code>goal_time</code>以内に到着すれば，軌道の追従は成功となります．
+そうでなければ失敗となります．</p>
+</li>
+<li>
+<p>constraints/stopped_velocity_tolerance(double, default: 0.01)</p>
+<p>おおよそ０とみなしていい速度の設定</p>
+</li>
+<li>
+<p>constraints/<joint>/goal(double, default: 0.0)</p>
+<p>ゴールに到達したジョイントの位置の誤差に対する許容値．ジョイントの位置が
+goal_position+/-goal_tolerance以下にあるとき，その軌道は成功したものとみなされます．</p>
+</li>
+<li>
+<p>gains/<joint>(associative array)</p>
+<p>PIDコントローラの設定に関するキーと値のペア．この設定はeffortとvelocityインターフェースを
+利用しているときに必要とされます．具体的には
+<a href="http://wiki.ros.org/joint_trajectory_controller#Controller_configuration_examples">ここ</a>
+を見てください．</p>
+</li>
+<li>
+<p>velocity_ff/<joint>(double, default: 0.0)</p>
+<p>フィードフォワード区間における速度ゲインで，PIDコントローラの出力に加えられます．
+これは任意であり，effortかvelocityインターフェースでのみしよされます．
+具体例は
+<a href="http://wiki.ros.org/joint_trajectory_controller#Controller_configuration_examples">ここ</a>
+を見てください．</p>
+</li>
+<li>
+<p>stop_trajectory_duration(double, default: 0.0)</p>
+<p>コントローラの開始時や軌道をキャンセルしたときに，位置保持モード(position hold mode)に
+入ります．このパラメータによって実行中の状態（位置＆速度）が停止状態に移行するまでの時間を
+制御できます．この設定には０かそれ以上の値を入力してください．</p>
+</li>
+<li>
+<p>state_publish_rate(double, default: 50)</p>
+<p>どのくらいの頻度(Hz)でコントローラが状態を発信するかの設定</p>
+</li>
+<li>
+<p>action_monitor_rate(double, default: 20)</p>
+<p>action goal 状態を監視する頻度．この変数の変更は上級者向けなため，変更はおすすめできません．</p>
+</li>
+<li>
+<p>allow_partial_joint_goal(bool, defalut: False)</p>
+<p>一部のジョイントに対してのみの<code>JointTrajctory</code>メッセージの送信を許可します．</p>
+</li>
+</ul>
+<h3 id="_9">コントローラの設定例</h3>
+<h4 id="321-position-interface">3.2.1 最小の設定例・position interface</h4>
+<pre><code>head_controller:
+  type: &quot;position_controllers/JointTrajectoryController&quot;
+  joints:
+    - head_1_joint
+    - head_2_joint
+</code></pre>
+
+<h4 id="322-velocity-interface">3.2.2 最小の設定例・velocity interface</h4>
+<pre><code>head_controller:
+  type: &quot;velocity_controllers/JointTrajectoryController&quot;
+  joints:
+    - head_1_joint
+    - head_2_joint
+
+  gains: # Required because we're controlling a velocity interface
+    head_1_joint: {p: 100,  d: 1, i: 1, i_clamp: 1}
+    head_2_joint: {p: 100,  d: 1, i: 1, i_clamp: 1}
+</code></pre>
+
+<h4 id="323-velocity-interface">3.2.3 速度フィードフォワード・velocity interface</h4>
+<pre><code>head_controller:
+  type: &quot;velocity_controllers/JointTrajectoryController&quot;
+  joints:
+    - head_1_joint
+    - head_2_joint
+
+  gains: # Required because we're controlling a velocity interface
+    head_1_joint: {p: 10,  d: 1, i: 1, i_clamp: 1} # Smaller 'p' term, since ff term does most of the work
+    head_2_joint: {p: 10,  d: 1, i: 1, i_clamp: 1} # Smaller 'p' term, since ff term does most of the work
+
+  velocity_ff:
+    head_1_joint: 1.0
+    head_2_joint: 1.0
+</code></pre>
+
+<h4 id="324-effort-interface">3.2.4 最小の設定例・effort interface</h4>
+<pre><code>head_controller:
+  type: &quot;effort_controllers/JointTrajectoryController&quot;
+  joints:
+    - head_1_joint
+    - head_2_joint
+
+  gains: # Required because we're controlling an effort interface
+    head_1_joint: {p: 100,  d: 1, i: 1, i_clamp: 1}
+    head_2_joint: {p: 100,  d: 1, i: 1, i_clamp: 1}
+</code></pre>
+
+<h4 id="325-effort-interface">3.2.5 完全な設定例・effort interface</h4>
+<pre><code>head_controller:
+  type: &quot;effort_controllers/JointTrajectoryController&quot;
+  joints:
+    - head_1_joint
+    - head_2_joint
+
+  constraints:
+    goal_time: 0.5                   # Override default
+    stopped_velocity_tolerance: 0.02 # Override default
+    head_1_joint:
+      trajectory: 0.05               # Not enforced if unspecified
+      goal: 0.02                     # Not enforced if unspecified
+    head_2_joint:
+      goal: 0.01                     # Not enforced if unspecified
+
+  gains: # Required because we're controlling an effort interface
+    head_1_joint: {p: 100,  d: 1, i: 1, i_clamp: 1}
+    head_2_joint: {p: 100,  d: 1, i: 1, i_clamp: 1}
+
+  state_publish_rate:  25            # Override default
+  action_monitor_rate: 30            # Override default
+  stop_trajectory_duration: 0        # Override default
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../understanding_trajectory_replacement/" class="btn btn-neutral float-right" title="Understanding Trajectory Replacement">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../5/" class="btn btn-neutral" title="プランニングシーン"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../../5/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../understanding_trajectory_replacement/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>

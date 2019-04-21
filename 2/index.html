@@ -14,7 +14,6 @@
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
-  <link href="https://unpkg.com/mermaid@7.1.2/dist/mermaid.css" rel="stylesheet">
   
   <script>
     // Current page data
@@ -95,12 +94,17 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../dot/">Dot</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../mermaid/">H</a>
+    <span class="caption-text">Joint trajectory controller</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../joint_trajectory_controller/joint_trajectory_controller/">joint_trajectory_controller</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../joint_trajectory_controller/understanding_trajectory_replacement/">Understanding Trajectory Replacement</a>
+                </li>
+    </ul>
 	    </li>
           
         </ul>
@@ -153,8 +157,8 @@ MoveIt!のRvizプラグインは仮想的な空間(scene)を作成します．�
 <ul>
 <li>デモを<code>launch</code>する</li>
 </ul>
-<div class="highlight"><pre><span></span>roslaunch panda_moveit_config demo.launch rviz_tutorial:=true
-</pre></div>
+<pre><code>roslaunch panda_moveit_config demo.launch rviz_tutorial:=true
+</code></pre>
 
 <ul>
 <li>
@@ -242,7 +246,6 @@ MoveIt!のRvizプラグインは仮想的な空間(scene)を作成します．�
     <script src="../js/theme.js" defer></script>
       <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-      <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js" defer></script>
       <script src="../search/main.js" defer></script>
 
 </body>

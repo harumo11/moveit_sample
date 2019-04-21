@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Harumo Sasatake">
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Understanding Trajectory Replacement - MoveIt! Japanese!</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Understanding Trajectory Replacement";
+    var mkdocs_page_input_path = "joint_trajectory_controller/understanding_trajectory_replacement.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> MoveIt! Japanese!</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">MoveIt!のチュートリアル</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../1/">ここから始めよう!</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../2/">MoveIt!のクイックスタート．Rvizとともに</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../3/">Move Group C++ インターフェース</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../4/">Robot ModelとRobot State</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../5/">プランニングシーン</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Joint trajectory controller</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../joint_trajectory_controller/">joint_trajectory_controller</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Understanding Trajectory Replacement</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#understanding-trajectory-replacement">Understanding Trajectory Replacement</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#1">1. 基本</a></li>
+        
+            <li><a class="toctree-l4" href="#2">2. 軌道開始時刻の効果</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">MoveIt! Japanese!</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Joint trajectory controller &raquo;</li>
+        
+      
+    
+    <li>Understanding Trajectory Replacement</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="understanding-trajectory-replacement">Understanding Trajectory Replacement</h1>
+<p>軌道の切り替えについての理解</p>
+<p><a href="../joint_trajectory_controller/">joint trajectory controller</a>で説明したとおり
+新しい軌道コマンドの到着は<strong>必ずしも</strong>コントローラが完全に現在実行中の軌道を捨て去り，
+そして新しい軌道を実行し始めることを意味しません．
+むしろ，コントローラは両方の軌道で利用できそうな部分を抜き取り，そして適切に組み合わせます.
+これにより，よりスマートな軌道置換行います．</p>
+<p>以下がコントローラが行う軌道置換のステップです．</p>
+<ul>
+<li>
+<dl>
+<dt>新しい軌道の中から使えそうな部分を得る．</dt>
+<dd>
+<p>未来に到達すべき全ての経由点を保存し，過去に到達すべきだったものを破棄します．
+有用な部分がない場合（つまり，すべての経由点が過去にある場合），新しい軌道は
+拒否され，現在の軌道は変更されずに実行を続けます．</p>
+</dd>
+</dl>
+</li>
+<li>
+<dl>
+<dt>現在の軌道の中から使えそうな部分を得る．</dt>
+<dd>
+<p>新しい軌道の開始時刻まで現在の軌道を保存し，それより後の部分の軌道は捨てます．</p>
+</dd>
+</dl>
+</li>
+<li>
+<dl>
+<dt>使えそうな部分を組み合わせます．</dt>
+<dd>
+<p>現在の軌道と新しい軌道の使えそうな部分を組み合わせます．</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>下記の例はこの振る舞いを詳細に説明しています．</p>
+<h2 id="1">1. 基本</h2>
+<p>この例は，現在，ジョイントが位置保存モード(下の図ではpos holdと書かれた平らな灰色の直線)
+にある場合を仮定します．
+新しい軌道(赤で示されています）が今(now)，到着しました．その軌跡は３つの経由点と
+未来の開始時刻(traj start)で構成されています．
+この経由点に到達すべき時刻(
+<a href="http://docs.ros.org/api/trajectory_msgs/html/msg/JointTrajectoryPoint.html">trajectory_msgs/JointTrajectoryPoint</a>
+の中のtime_from_startメンバによって指定
+)は軌道の開始時刻から相対的に計算されたものです．</p>
+<p>コントローラは開始時刻(traj start)で現在の軌道を繋ぎ合わせを行います．
+そして，３つの経由点を追加します．
+現在(now)と開始時刻(traj start)までの間では以前の位置が維持されていることに
+気をつけてください．この時点では，新しい軌道は，まだ開始されません．
+最後の経由点に到達した後，その位置は新しいコマンドが到着するまで保持されます．</p>
+<p>コントローラは現在と新しい軌道の間の推移がスムーズであることを保証します．
+これは，最初の経由点に到達するまでの時間がより長い場合は，推移がゆっくりになることを意味します．</p>
+<p><img alt="image1" src="../understanding-trajectory-replacement1.png" /></p>
+<h2 id="2">2. 軌道開始時刻の効果</h2>
+<p>この例では，同じ軌道を異なる開始時刻(start time)でコントローラに送った場合の効果について
+説明しています．状況としては，コントローラは上述の例の軌道(赤のライン)を実行中に，
+新しいコマンド(緑のライン)を受け取ったところです．ただ，そのコマンドの開始時刻は
+それぞれ，０(start now)，未来の時刻，過去の時刻となっています．</p>
+<p>最後の図(Trajectory start time in the past)において，
+最も興味深いことは，新しい軌道の開始時刻と最初の経由点の到達時刻は
+すでに過ぎ去ってしまっているということです．
+この場合，最初の経由点は捨てられ，２つ目の経由点のみが実行されます．</p>
+<p><img alt="image2" src="../understanding-trajectory-replacement2.png" />
+<br>
+<br>
+<br>
+<img alt="image3" src="../understanding-trajectory-replacement3.png" />
+<br>
+<br>
+<br>
+<img alt="image4" src="../understanding-trajectory-replacement4.png" /></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../joint_trajectory_controller/" class="btn btn-neutral" title="joint_trajectory_controller"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../joint_trajectory_controller/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>
